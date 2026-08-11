@@ -3,21 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Objeto de Aprendizagem - Painel Traseiro da CPU</title>
-    
-    <!-- Componente WebXR / Realidade Aumentada da Google -->
-    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
+    <title>Objeto de Aprendizagem - CPU AR Hiro</title>
+
+    <!-- Bibliotecas A-Frame e AR.js para identificação do Marcador Hiro -->
+    <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
 
     <style>
-        :root {
-            --primary: #0d6efd;
-            --primary-dark: #0a58ca;
-            --dark: #0f172a;
-            --card-bg: #ffffff;
-            --border-radius: 12px;
-            --box-shadow: 0 8px 24px rgba(0,0,0,0.12);
-        }
-
         * {
             box-sizing: border-box;
             margin: 0;
@@ -25,202 +17,45 @@
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
         }
 
-        body {
-            background-color: #f0f4f8;
-            color: #212529;
-            line-height: 1.5;
-            padding-bottom: 70px;
-        }
-
+        /* PAINEL SUPERIOR COM INSTRUÇÕES */
         header {
-            background: linear-gradient(135deg, #1e293b, #0f172a);
-            color: white;
-            padding: 1.25rem 1rem;
-            text-align: center;
-            box-shadow: var(--box-shadow);
-        }
-
-        header h1 {
-            font-size: 1.5rem;
-            margin-bottom: 0.25rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        header p {
-            font-size: 0.88rem;
-            opacity: 0.85;
-        }
-
-        .container {
-            max-width: 1250px;
-            margin: 1.25rem auto;
-            padding: 0 1rem;
-        }
-
-        .app-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 1.25rem;
-        }
-
-        @media (min-width: 992px) {
-            .app-grid {
-                grid-template-columns: 1fr 420px;
-            }
-        }
-
-        .card {
-            background: var(--card-bg);
-            border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
-            padding: 1.25rem;
-            margin-bottom: 1.25rem;
-        }
-
-        .card-title {
-            font-size: 1.05rem;
-            font-weight: 700;
-            color: var(--primary-dark);
-            border-bottom: 2px solid #eef2f5;
-            padding-bottom: 0.5rem;
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        /* CONTAINER DO PAINEL */
-        .cpu-stage {
-            position: relative;
-            width: 100%;
-            height: 520px;
-            background: radial-gradient(circle, #334155 0%, #0f172a 100%);
-            border-radius: var(--border-radius);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-        }
-
-        /* DESENHO DO ESPELHO DA CPU */
-        .motherboard-shield {
-            width: 220px;
-            height: 440px;
-            background: linear-gradient(180deg, #94a3b8, #64748b, #475569);
-            border: 4px solid #cbd5e1;
-            border-radius: 8px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 15px 10px;
-            gap: 12px;
-            position: relative;
-            z-index: 5;
-        }
-
-        .shield-grill {
-            width: 100%;
-            height: 40px;
-            background: repeating-linear-gradient(45deg, #1e293b, #1e293b 5px, #334155 5px, #334155 10px);
-            border: 1px solid #0f172a;
-            border-radius: 4px;
-        }
-
-        /* CONECTORES DA CPU */
-        .port-group {
-            width: 100%;
-            background: #1e293b;
-            border: 2px solid #0f172a;
-            border-radius: 6px;
-            padding: 8px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 6px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            position: relative;
-        }
-
-        .port-group:hover {
-            border-color: #38bdf8;
-            box-shadow: 0 0 12px #38bdf8;
-            transform: scale(1.03);
-        }
-
-        .port-label {
-            position: absolute;
-            top: -10px;
-            right: -10px;
-            background: var(--primary);
-            color: white;
-            font-size: 0.75rem;
-            font-weight: bold;
-            width: 22px;
-            height: 22px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.4);
-        }
-
-        .draw-port { background: #000; border: 1px solid #94a3b8; border-radius: 3px; }
-        .draw-ps2 { width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(90deg, #a855f7 50%, #06b6d4 50%); }
-        .draw-usb { width: 45px; height: 16px; background: #0284c7; }
-        .draw-usb-2 { width: 45px; height: 16px; background: #334155; }
-        .draw-hdmi { width: 50px; height: 14px; background: #fbbf24; border-radius: 2px 2px 5px 5px; }
-        .draw-dp { width: 50px; height: 14px; background: #e2e8f0; }
-        .draw-rj45 { width: 40px; height: 22px; background: #d97706; }
-        .draw-audio-container { display: flex; gap: 8px; }
-        .draw-audio-jack { width: 18px; height: 18px; border-radius: 50%; border: 2px solid #fff; }
-
-        /* BOTÃO DE REALIDADE AUMENTADA */
-        .btn-ar-trigger {
-            position: absolute;
-            bottom: 15px;
-            right: 15px;
-            background: linear-gradient(135deg, #0d6efd, #0a58ca);
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 30px;
-            font-weight: bold;
-            font-size: 0.9rem;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-            z-index: 10;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn-ar-trigger:hover {
-            transform: scale(1.05);
-            background: linear-gradient(135deg, #0a58ca, #084298);
-        }
-
-        /* MODEL-VIEWER PARA PROJEÇÃO 3D EM RA */
-        model-viewer {
-            position: absolute;
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
-            height: 100%;
-            opacity: 0.001; /* Fica invisível no painel 2D mas pronto para disparar a RA */
-            pointer-events: none;
+            background: rgba(15, 23, 42, 0.9);
+            color: white;
+            padding: 12px 16px;
+            text-align: center;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
         }
 
-        /* PAINEL INFORMATIVO */
-        .info-box {
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            padding: 1.25rem;
+        header h1 {
+            font-size: 1.1rem;
+            margin-bottom: 2px;
+        }
+
+        header p {
+            font-size: 0.8rem;
+            opacity: 0.85;
+        }
+
+        /* CARD DE INFORMAÇÃO FLUTUANTE AO CLICAR NA PORTA */
+        .info-card {
+            position: fixed;
+            bottom: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 450px;
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+            z-index: 1000;
+            display: none;
+            border-top: 4px solid #0d6efd;
         }
 
         .info-tag {
@@ -229,85 +64,44 @@
             color: #3730a3;
             font-size: 0.75rem;
             font-weight: bold;
-            padding: 3px 8px;
-            border-radius: 12px;
-            margin-bottom: 0.75rem;
+            padding: 2px 8px;
+            border-radius: 10px;
+            margin-bottom: 6px;
         }
 
         .info-title {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: bold;
             color: #0f172a;
-            margin-bottom: 0.5rem;
+            margin-bottom: 6px;
         }
 
-        .info-detail {
-            font-size: 0.88rem;
+        .info-desc {
+            font-size: 0.85rem;
             color: #475569;
-            margin-bottom: 0.75rem;
-            line-height: 1.5;
+            line-height: 1.4;
+            margin-bottom: 8px;
         }
 
-        .specs-list {
-            list-style: none;
+        .info-spec {
+            font-size: 0.8rem;
+            color: #1e293b;
             border-top: 1px dashed #cbd5e1;
-            padding-top: 0.75rem;
-            margin-top: 0.75rem;
+            padding-top: 6px;
         }
 
-        .specs-list li {
-            font-size: 0.82rem;
-            margin-bottom: 0.4rem;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .specs-list strong { color: #334155; }
-
-        /* MODAL EXPLICATIVO / ALERTA DE RA */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8);
-            z-index: 2000;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .modal-card {
-            background: white;
-            padding: 1.8rem;
-            border-radius: 16px;
-            max-width: 450px;
-            width: 100%;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-        }
-
-        .modal-card h3 {
-            color: #0d6efd;
-            margin-bottom: 12px;
-        }
-
-        .modal-card p {
-            font-size: 0.9rem;
-            color: #475569;
-            margin-bottom: 15px;
-            text-align: left;
-            line-height: 1.5;
-        }
-
-        .btn-secondary {
-            background-color: #0d6efd;
-            color: white;
-            padding: 0.6rem 1.4rem;
+        .btn-close {
+            position: absolute;
+            top: 10px;
+            right: 12px;
+            background: #f1f5f9;
             border: none;
-            border-radius: 8px;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
             font-weight: bold;
             cursor: pointer;
-            margin-top: 0.5rem;
+            color: #64748b;
         }
 
         footer {
@@ -315,185 +109,121 @@
             bottom: 0;
             left: 0;
             width: 100%;
-            background-color: var(--dark);
+            background-color: #0f172a;
             color: #adb5bd;
             text-align: center;
-            padding: 0.75rem;
-            font-size: 0.8rem;
+            padding: 0.5rem;
+            font-size: 0.75rem;
             z-index: 1000;
         }
     </style>
 </head>
-<body>
+<body style="margin: 0px; overflow: hidden;">
 
     <header>
-        <h1><span>🖥️</span> Hardware: Painel Traseiro da CPU</h1>
-        <p>Objeto de Aprendizagem Interativo • Mapeamento de Conectores E/S</p>
+        <h1>🖥️ Painel Traseiro da CPU em Realidade Aumentada</h1>
+        <p>Aponta a câmera para a imagem <strong>HIRO</strong> e toque em uma porta para inspecionar</p>
     </header>
 
-    <div class="container">
-        <div class="app-grid">
-
-            <!-- ÁREA VISUAL DA CPU -->
-            <section>
-                <div class="card">
-                    <div class="card-title">
-                        <span>Espelho Traseiro da Placa-Mãe</span>
-                        <span style="background:#e0e7ff; color:#3730a3; padding:2px 8px; border-radius:10px; font-size:0.75rem;">Modo Interativo</span>
-                    </div>
-
-                    <div class="cpu-stage">
-
-                        <!-- PAINEL REAL COM CONECTORES MAREADOS -->
-                        <div class="motherboard-shield">
-                            <div class="shield-grill"></div>
-
-                            <!-- 1. PS/2 -->
-                            <div class="port-group" onclick="exibirInfo('ps2')">
-                                <span class="port-label">1</span>
-                                <div class="draw-ps2"></div>
-                            </div>
-
-                            <!-- 2. USB -->
-                            <div class="port-group" onclick="exibirInfo('usb')">
-                                <span class="port-label">2</span>
-                                <div style="display:flex; gap:6px;">
-                                    <div class="draw-port draw-usb"></div>
-                                    <div class="draw-port draw-usb"></div>
-                                </div>
-                                <div style="display:flex; gap:6px; margin-top:3px;">
-                                    <div class="draw-port draw-usb-2"></div>
-                                    <div class="draw-port draw-usb-2"></div>
-                                </div>
-                            </div>
-
-                            <!-- 3. Vídeo HDMI / DP -->
-                            <div class="port-group" onclick="exibirInfo('video')">
-                                <span class="port-label">3</span>
-                                <div class="draw-port draw-hdmi"></div>
-                                <div class="draw-port draw-dp" style="margin-top:3px;"></div>
-                            </div>
-
-                            <!-- 4. Rede RJ-45 -->
-                            <div class="port-group" onclick="exibirInfo('rede')">
-                                <span class="port-label">4</span>
-                                <div class="draw-port draw-rj45"></div>
-                            </div>
-
-                            <!-- 5. Áudio P2 -->
-                            <div class="port-group" onclick="exibirInfo('audio')">
-                                <span class="port-label">5</span>
-                                <div class="draw-audio-container">
-                                    <div class="draw-audio-jack" style="background:#22c55e;"></div>
-                                    <div class="draw-audio-jack" style="background:#ec4899;"></div>
-                                    <div class="draw-audio-jack" style="background:#3b82f6;"></div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- MOTOR 3D REQUERIDO PARA AR (Modelo GLB de Peça Eletrônica) -->
-                        <model-viewer 
-                            id="ar-engine"
-                            src="https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Box/glTF-Binary/Box.glb"
-                            alt="Modelo 3D para RA"
-                            ar
-                            ar-modes="webxr scene-viewer quick-look"
-                            camera-controls>
-                        </model-viewer>
-
-                        <!-- BOTÃO DE REALIDADE AUMENTADA -->
-                        <button class="btn-ar-trigger" onclick="acionarRA()">
-                            <span>📱</span> Ver em Realidade Aumentada (RA)
-                        </button>
-                    </div>
-                </div>
-            </section>
-
-            <!-- PAINEL TÉCNICO INFORMATIVO -->
-            <aside>
-                <div class="card">
-                    <div class="card-title">Detalhamento do Conector</div>
-
-                    <div id="info-panel" class="info-box">
-                        <span class="info-tag" id="port-category">Aguardando Seleção</span>
-                        <div class="info-title" id="port-name">Clique em uma porta na CPU</div>
-                        <div class="info-detail" id="port-desc">
-                            Clique em qualquer uma das portas numeradas (1 a 5) no painel ao lado para exibir seu nome, taxa de transferência e periféricos compatíveis.
-                        </div>
-
-                        <ul class="specs-list" id="port-specs" style="display: none;">
-                            <li><strong>Tipo de Sinal:</strong> <span id="spec-signal">-</span></li>
-                            <li><strong>Taxa de Transmissão:</strong> <span id="spec-speed">-</span></li>
-                            <li><strong>Uso Recomendado:</strong> <span id="spec-use">-</span></li>
-                        </ul>
-                    </div>
-                </div>
-            </aside>
-
-        </div>
+    <!-- CARD POPUP DE DETALHES -->
+    <div id="info-card" class="info-card">
+        <button class="btn-close" onclick="fecharInfo()">✕</button>
+        <span id="card-tag" class="info-tag">Porta</span>
+        <div id="card-title" class="info-title">Nome da Porta</div>
+        <div id="card-desc" class="info-desc">Descrição técnica.</div>
+        <div id="card-spec" class="info-spec"><strong>Velocidade:</strong> <span id="card-speed">-</span></div>
     </div>
 
-    <!-- MODAL DE AJUDA / REQUISITOS DE AR -->
-    <div id="qr-modal" class="modal-overlay" onclick="fecharModal()">
-        <div class="modal-card" onclick="event.stopPropagation()">
-            <h3>📱 Como Usar a Realidade Aumentada</h3>
-            <p>
-                A Realidade Aumentada abre a câmera do celular para projetar um objeto 3D no mundo real. Para que ela abra, certifique-se de que:
-            </p>
-            <p>
-                1. Você está usando um <strong>celular (Android ou iPhone)</strong>.<br>
-                2. O site está rodando em um servidor com suporte a <strong>HTTPS://</strong> ou local.<br>
-                3. O navegador (Chrome/Safari) tem permissão de acesso à câmera.
-            </p>
-            <button class="btn-secondary" onclick="fecharModal()">Entendi</button>
-        </div>
-    </div>
+    <!-- CENA DE REALIDADE AUMENTADA (A-FRAME + AR.JS) -->
+    <a-scene 
+        embedded 
+        arjs="sourceType: webcam; debugUIEnabled: false;"
+        cursor="rayOrigin: mouse" 
+        raycaster="objects: .clickable">
+
+        <!-- MARCADOR HIRO -->
+        <a-marker preset="hiro">
+
+            <!-- ESPELHO / PLACA TRASEIRA DA CPU -->
+            <a-entity position="0 0 0" rotation="-90 0 0" scale="1 1 1">
+                
+                <!-- Placa base prateada metalizada -->
+                <a-plane position="0 0 0" width="1.8" height="3.2" color="#64748b" material="metalness: 0.5; roughness: 0.3"></a-plane>
+                <a-plane position="0 0 0.01" width="1.7" height="3.1" color="#475569"></a-plane>
+
+                <!-- 1. CONECTOR PS/2 (ROXO / VERDE) -->
+                <a-cylinder class="clickable" onclick="exibirInfo('ps2')" position="-0.4 1.1 0.08" radius="0.18" height="0.12" color="#a855f7" rotation="90 0 0">
+                    <a-text value="1" position="0 0.2 0" align="center" scale="1.5 1.5 1.5" color="#ffffff"></a-text>
+                </a-cylinder>
+
+                <!-- 2. PORTAS USB 3.0 (AZUIS) -->
+                <a-box class="clickable" onclick="exibirInfo('usb')" position="0.3 0.6 0.08" width="0.5" height="0.22" depth="0.12" color="#0284c7">
+                    <a-text value="2" position="0 0.25 0" align="center" scale="1.5 1.5 1.5" color="#ffffff"></a-text>
+                </a-box>
+                <a-box class="clickable" onclick="exibirInfo('usb')" position="0.3 0.2 0.08" width="0.5" height="0.22" depth="0.12" color="#0284c7"></a-box>
+
+                <!-- 3. SAÍDAS DE VÍDEO (HDMI / DISPLAYPORT - DOURADO / CINZA) -->
+                <a-box class="clickable" onclick="exibirInfo('video')" position="-0.3 0.1 0.08" width="0.6" height="0.18" depth="0.1" color="#eab308">
+                    <a-text value="3" position="0 0.22 0" align="center" scale="1.5 1.5 1.5" color="#ffffff"></a-text>
+                </a-box>
+
+                <!-- 4. REDE RJ-45 ETHERNET -->
+                <a-box class="clickable" onclick="exibirInfo('rede')" position="0.3 -0.3 0.08" width="0.45" height="0.3" depth="0.15" color="#d97706">
+                    <a-text value="4" position="0 0.25 0" align="center" scale="1.5 1.5 1.5" color="#ffffff"></a-text>
+                </a-box>
+
+                <!-- 5. ÁUDIO P2 (JACKS COLORIDOS) -->
+                <a-entity class="clickable" onclick="exibirInfo('audio')" position="0 -1.0 0.08">
+                    <a-cylinder position="-0.4 0 0" radius="0.1" height="0.1" color="#22c55e" rotation="90 0 0"></a-cylinder>
+                    <a-cylinder position="0 0 0" radius="0.1" height="0.1" color="#ec4899" rotation="90 0 0">
+                        <a-text value="5" position="0 0.25 0" align="center" scale="1.5 1.5 1.5" color="#ffffff"></a-text>
+                    </a-cylinder>
+                    <a-cylinder position="0.4 0 0" radius="0.1" height="0.1" color="#3b82f6" rotation="90 0 0"></a-cylinder>
+                </a-entity>
+
+            </a-entity>
+        </a-marker>
+
+        <!-- CÂMERA -->
+        <a-entity camera></a-entity>
+    </a-scene>
 
     <footer>
         Modelo Hiro | Objeto de Aprendizagem baseado no Plano de Curso
     </footer>
 
     <script>
+        // DADOS DOS CONECTORES
         const CONECTORES = {
             ps2: {
                 categoria: "Conector Legado",
-                nome: "Porta PS/2 Combo (Teclado/Mouse)",
-                descricao: "Conector circular de 6 pinos para periféricos. A cor roxa indica suporte a teclado e a verde a mouse.",
-                sinal: "Serial Analógico / Digital",
-                velocidade: "Comunicação por Interrupção Direta (Baixa latência)",
-                uso: "Teclados e Mouses legados"
+                nome: "Porta PS/2 Combo",
+                descricao: "Conector circular de 6 pinos para teclado (roxo) ou mouse (verde).",
+                velocidade: "Baixa latência (Interrupção direta)"
             },
             usb: {
                 categoria: "Comunicação & Periféricos",
-                nome: "Portas USB 3.2 (Azul) / USB 2.0 (Preta)",
-                descricao: "Portas universais para dados e energia. As portas azuis (USB 3.0/3.2) transmitem dados até 10 vezes mais rápido que as pretas (USB 2.0).",
-                sinal: "Digital / Dados + Alimentação Elétrica (5V)",
-                velocidade: "USB 2.0 (480 Mbps) | USB 3.2 (Até 10 Gbps)",
-                uso: "Pendrives, Teclados, Mouses e Impressoras"
+                nome: "Portas USB 3.0 / 3.2",
+                descricao: "Portas de alta velocidade para conectar pendrives, HDs externos, teclados e mouses.",
+                velocidade: "Até 5 Gbps / 10 Gbps"
             },
             video: {
-                categoria: "Saída de Vídeo de Alta Definição",
-                nome: "Portas HDMI & DisplayPort",
-                descricao: "Conectores para transmissão de vídeo e áudio digital de alta qualidade para monitores e projetores.",
-                sinal: "Digital (Vídeo + Áudio Multicanal)",
-                velocidade: "HDMI 2.1 (Até 48 Gbps) | DisplayPort (32.4 Gbps)",
-                uso: "Monitores Gamer, TVs e Projetores"
+                categoria: "Saída de Vídeo",
+                nome: "Porta HDMI / DisplayPort",
+                descricao: "Transmite sinal de vídeo e áudio digital para monitores, TVs e projetores.",
+                velocidade: "HDMI 2.1 (até 48 Gbps) / DP 1.4"
             },
             rede: {
                 categoria: "Conectividade de Rede",
-                nome: "Porta RJ-45 (Ethernet LAN / Gigabit)",
-                descricao: "Conecta o computador à internet via cabo de rede. Garante maior estabilidade e menor latência que o Wi-Fi.",
-                sinal: "Digital de Rede",
-                velocidade: "10/100/1000 Mbps (Gigabit)",
-                uso: "Cabo de rede conectado ao Roteador/Modem"
+                nome: "Porta RJ-45 (Ethernet LAN)",
+                descricao: "Conecta a CPU ao roteador via cabo de rede para acesso à internet.",
+                velocidade: "10/100/1000 Mbps (Gigabit)"
             },
             audio: {
-                categoria: "Entrada e Saída de Áudio",
-                nome: "Conectores Áudio Jack P2 (3.5mm)",
-                descricao: "Entradas e saídas de áudio: Verde (Saída de Som/Fone), Rosa (Microfone) e Azul (Line-In / Entrada Auxiliar).",
-                sinal: "Analógico de Áudio",
-                velocidade: "Frequência de áudio 20Hz a 20kHz",
-                uso: "Fones de Ouvido, Caixas de Som e Microfones"
+                categoria: "Saída/Entrada de Áudio",
+                nome: "Conectores Jack P2 (3.5mm)",
+                descricao: "Conectores de som: Verde (Fone/Caixa de som), Rosa (Microfone) e Azul (Line-In).",
+                velocidade: "Sinal Analógico de Áudio"
             }
         };
 
@@ -501,34 +231,16 @@
             const dados = CONECTORES[chave];
             if (!dados) return;
 
-            document.getElementById('port-category').innerText = dados.categoria;
-            document.getElementById('port-name').innerText = dados.nome;
-            document.getElementById('port-desc').innerText = dados.descricao;
+            document.getElementById('card-tag').innerText = dados.categoria;
+            document.getElementById('card-title').innerText = dados.nome;
+            document.getElementById('card-desc').innerText = dados.descricao;
+            document.getElementById('card-speed').innerText = dados.velocidade;
 
-            document.getElementById('spec-signal').innerText = dados.sinal;
-            document.getElementById('spec-speed').innerText = dados.velocidade;
-            document.getElementById('spec-use').innerText = dados.uso;
-
-            document.getElementById('port-specs').style.display = 'block';
+            document.getElementById('info-card').style.display = 'block';
         }
 
-        function acionarRA() {
-            const arEngine = document.getElementById('ar-engine');
-            
-            // Verifica se o navegador/dispositivo suporta a chamada direta do Model-Viewer AR
-            if (arEngine && typeof arEngine.activateAR === 'function') {
-                try {
-                    arEngine.activateAR();
-                } catch (e) {
-                    document.getElementById('qr-modal').style.display = 'flex';
-                }
-            } else {
-                document.getElementById('qr-modal').style.display = 'flex';
-            }
-        }
-
-        function fecharModal() {
-            document.getElementById('qr-modal').style.display = 'none';
+        function fecharInfo() {
+            document.getElementById('info-card').style.display = 'none';
         }
     </script>
 </body>
