@@ -12,7 +12,6 @@
         :root {
             --primary: #0d6efd;
             --primary-dark: #0a58ca;
-            --secondary: #198754;
             --dark: #0f172a;
             --card-bg: #ffffff;
             --border-radius: 12px;
@@ -93,7 +92,7 @@
             justify-content: space-between;
         }
 
-        /* ÁREA DO PAINEL DA CPU */
+        /* CONTAINER DO PAINEL */
         .cpu-stage {
             position: relative;
             width: 100%;
@@ -106,7 +105,7 @@
             overflow: hidden;
         }
 
-        /* ESPELHO TRASEIRO DA CPU (Gabinete / Placa-Mãe) */
+        /* DESENHO DO ESPELHO DA CPU */
         .motherboard-shield {
             width: 220px;
             height: 440px;
@@ -120,6 +119,7 @@
             padding: 15px 10px;
             gap: 12px;
             position: relative;
+            z-index: 5;
         }
 
         .shield-grill {
@@ -130,7 +130,7 @@
             border-radius: 4px;
         }
 
-        /* BLOCOS DE PORTAS */
+        /* CONECTORES DA CPU */
         .port-group {
             width: 100%;
             background: #1e293b;
@@ -146,7 +146,7 @@
             position: relative;
         }
 
-        .port-group:hover, .port-group.active {
+        .port-group:hover {
             border-color: #38bdf8;
             box-shadow: 0 0 12px #38bdf8;
             transform: scale(1.03);
@@ -169,13 +169,7 @@
             box-shadow: 0 2px 6px rgba(0,0,0,0.4);
         }
 
-        /* DESENHO DAS PORTAS */
-        .draw-port {
-            background: #000;
-            border: 1px solid #94a3b8;
-            border-radius: 3px;
-        }
-
+        .draw-port { background: #000; border: 1px solid #94a3b8; border-radius: 3px; }
         .draw-ps2 { width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(90deg, #a855f7 50%, #06b6d4 50%); }
         .draw-usb { width: 45px; height: 16px; background: #0284c7; }
         .draw-usb-2 { width: 45px; height: 16px; background: #334155; }
@@ -185,20 +179,20 @@
         .draw-audio-container { display: flex; gap: 8px; }
         .draw-audio-jack { width: 18px; height: 18px; border-radius: 50%; border: 2px solid #fff; }
 
-        /* BOTÃO DE AR DO MODEL VIEWER */
+        /* BOTÃO DE REALIDADE AUMENTADA */
         .btn-ar-trigger {
             position: absolute;
             bottom: 15px;
             right: 15px;
-            background: linear-gradient(135deg, #007bff, #0056b3);
+            background: linear-gradient(135deg, #0d6efd, #0a58ca);
             color: white;
             border: none;
-            padding: 10px 18px;
-            border-radius: 24px;
+            padding: 12px 20px;
+            border-radius: 30px;
             font-weight: bold;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
             z-index: 10;
             display: flex;
             align-items: center;
@@ -207,6 +201,18 @@
 
         .btn-ar-trigger:hover {
             transform: scale(1.05);
+            background: linear-gradient(135deg, #0a58ca, #084298);
+        }
+
+        /* MODEL-VIEWER PARA PROJEÇÃO 3D EM RA */
+        model-viewer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.001; /* Fica invisível no painel 2D mas pronto para disparar a RA */
+            pointer-events: none;
         }
 
         /* PAINEL INFORMATIVO */
@@ -258,34 +264,50 @@
 
         .specs-list strong { color: #334155; }
 
-        /* MODAL RA */
+        /* MODAL EXPLICATIVO / ALERTA DE RA */
         .modal-overlay {
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.75);
+            background: rgba(0,0,0,0.8);
             z-index: 2000;
             align-items: center;
             justify-content: center;
+            padding: 20px;
         }
 
         .modal-card {
             background: white;
-            padding: 2rem;
+            padding: 1.8rem;
             border-radius: 16px;
-            max-width: 420px;
+            max-width: 450px;
+            width: 100%;
             text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .modal-card h3 {
+            color: #0d6efd;
+            margin-bottom: 12px;
+        }
+
+        .modal-card p {
+            font-size: 0.9rem;
+            color: #475569;
+            margin-bottom: 15px;
+            text-align: left;
+            line-height: 1.5;
         }
 
         .btn-secondary {
-            background-color: #6c757d;
+            background-color: #0d6efd;
             color: white;
-            padding: 0.6rem 1.2rem;
+            padding: 0.6rem 1.4rem;
             border: none;
-            border-radius: 6px;
+            border-radius: 8px;
             font-weight: bold;
             cursor: pointer;
-            margin-top: 1rem;
+            margin-top: 0.5rem;
         }
 
         footer {
@@ -306,33 +328,33 @@
 
     <header>
         <h1><span>🖥️</span> Hardware: Painel Traseiro da CPU</h1>
-        <p>Objeto de Aprendizagem Interativo • Identificação de Conectores E/S</p>
+        <p>Objeto de Aprendizagem Interativo • Mapeamento de Conectores E/S</p>
     </header>
 
     <div class="container">
         <div class="app-grid">
 
-            <!-- ÁREA DO PAINEL DA CPU -->
+            <!-- ÁREA VISUAL DA CPU -->
             <section>
                 <div class="card">
                     <div class="card-title">
                         <span>Espelho Traseiro da Placa-Mãe</span>
-                        <span class="status-badge" style="background:#e2e8f0; color:#334155; padding:2px 8px; border-radius:10px; font-size:0.75rem;">Visão Interativa</span>
+                        <span style="background:#e0e7ff; color:#3730a3; padding:2px 8px; border-radius:10px; font-size:0.75rem;">Modo Interativo</span>
                     </div>
 
                     <div class="cpu-stage">
 
-                        <!-- PAINEL REAL DA CPU (SEM O BONECO ASTRONAUTA) -->
+                        <!-- PAINEL REAL COM CONECTORES MAREADOS -->
                         <div class="motherboard-shield">
                             <div class="shield-grill"></div>
 
-                            <!-- 1. PS/2 Combo -->
+                            <!-- 1. PS/2 -->
                             <div class="port-group" onclick="exibirInfo('ps2')">
                                 <span class="port-label">1</span>
                                 <div class="draw-ps2"></div>
                             </div>
 
-                            <!-- 2. USB 3.2 / 2.0 -->
+                            <!-- 2. USB -->
                             <div class="port-group" onclick="exibirInfo('usb')">
                                 <span class="port-label">2</span>
                                 <div style="display:flex; gap:6px;">
@@ -345,20 +367,20 @@
                                 </div>
                             </div>
 
-                            <!-- 3. HDMI & DisplayPort -->
+                            <!-- 3. Vídeo HDMI / DP -->
                             <div class="port-group" onclick="exibirInfo('video')">
                                 <span class="port-label">3</span>
                                 <div class="draw-port draw-hdmi"></div>
                                 <div class="draw-port draw-dp" style="margin-top:3px;"></div>
                             </div>
 
-                            <!-- 4. Rede RJ-45 Ethernet -->
+                            <!-- 4. Rede RJ-45 -->
                             <div class="port-group" onclick="exibirInfo('rede')">
                                 <span class="port-label">4</span>
                                 <div class="draw-port draw-rj45"></div>
                             </div>
 
-                            <!-- 5. Conectores de Áudio P2 -->
+                            <!-- 5. Áudio P2 -->
                             <div class="port-group" onclick="exibirInfo('audio')">
                                 <span class="port-label">5</span>
                                 <div class="draw-audio-container">
@@ -369,23 +391,25 @@
                             </div>
                         </div>
 
-                        <!-- Componente Model Viewer oculto apenas para prover a API de RA -->
+                        <!-- MOTOR 3D REQUERIDO PARA AR (Modelo GLB de Peça Eletrônica) -->
                         <model-viewer 
                             id="ar-engine"
+                            src="https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Box/glTF-Binary/Box.glb"
+                            alt="Modelo 3D para RA"
                             ar
                             ar-modes="webxr scene-viewer quick-look"
-                            style="display:none;">
+                            camera-controls>
                         </model-viewer>
 
-                        <!-- Botão de Realidade Aumentada Funcional -->
+                        <!-- BOTÃO DE REALIDADE AUMENTADA -->
                         <button class="btn-ar-trigger" onclick="acionarRA()">
-                            📱 Ver em Realidade Aumentada (RA)
+                            <span>📱</span> Ver em Realidade Aumentada (RA)
                         </button>
                     </div>
                 </div>
             </section>
 
-            <!-- PAINEL DE INFORMAÇÕES TÉCNICAS -->
+            <!-- PAINEL TÉCNICO INFORMATIVO -->
             <aside>
                 <div class="card">
                     <div class="card-title">Detalhamento do Conector</div>
@@ -394,7 +418,7 @@
                         <span class="info-tag" id="port-category">Aguardando Seleção</span>
                         <div class="info-title" id="port-name">Clique em uma porta na CPU</div>
                         <div class="info-detail" id="port-desc">
-                            Clique em qualquer um dos conectores numerados (1 a 5) no painel traseiro da CPU ao lado para aprender a função, velocidade e dispositivos compatíveis.
+                            Clique em qualquer uma das portas numeradas (1 a 5) no painel ao lado para exibir seu nome, taxa de transferência e periféricos compatíveis.
                         </div>
 
                         <ul class="specs-list" id="port-specs" style="display: none;">
@@ -409,18 +433,18 @@
         </div>
     </div>
 
-    <!-- MODAL RA PARA COMPUTADORES -->
+    <!-- MODAL DE AJUDA / REQUISITOS DE AR -->
     <div id="qr-modal" class="modal-overlay" onclick="fecharModal()">
         <div class="modal-card" onclick="event.stopPropagation()">
-            <h3 style="color:#0d6efd; margin-bottom:10px;">📱 Projetar em Realidade Aumentada</h3>
-            <p style="font-size:0.88rem; color:#555; margin-bottom:15px;">
-                Para projetar o painel no seu ambiente via câmera:
+            <h3>📱 Como Usar a Realidade Aumentada</h3>
+            <p>
+                A Realidade Aumentada abre a câmera do celular para projetar um objeto 3D no mundo real. Para que ela abra, certifique-se de que:
             </p>
-            <ol style="text-align:left; font-size:0.85rem; margin-left:20px; color:#333; line-height:1.6;">
-                <li>Acesse o site pelo <strong>navegador do seu Celular</strong>.</li>
-                <li>O site deve estar hospedado em protocolo seguro (<strong>https://</strong>).</li>
-                <li>Toque no botão azul <strong>"Ver em Realidade Aumentada"</strong>.</li>
-            </ol>
+            <p>
+                1. Você está usando um <strong>celular (Android ou iPhone)</strong>.<br>
+                2. O site está rodando em um servidor com suporte a <strong>HTTPS://</strong> ou local.<br>
+                3. O navegador (Chrome/Safari) tem permissão de acesso à câmera.
+            </p>
             <button class="btn-secondary" onclick="fecharModal()">Entendi</button>
         </div>
     </div>
@@ -434,41 +458,41 @@
             ps2: {
                 categoria: "Conector Legado",
                 nome: "Porta PS/2 Combo (Teclado/Mouse)",
-                descricao: "Conector circular de 6 pinos para periféricos. A cor roxa indica suporte a teclado e a verde a mouse. Atualmente foi substituído pelo padrão USB.",
+                descricao: "Conector circular de 6 pinos para periféricos. A cor roxa indica suporte a teclado e a verde a mouse.",
                 sinal: "Serial Analógico / Digital",
-                velocidade: "Baixa latência (Comunicação de Interrupção Direta)",
+                velocidade: "Comunicação por Interrupção Direta (Baixa latência)",
                 uso: "Teclados e Mouses legados"
             },
             usb: {
                 categoria: "Comunicação & Periféricos",
                 nome: "Portas USB 3.2 (Azul) / USB 2.0 (Preta)",
-                descricao: "Portas universais para transmissão de dados e energia. As portas azuis (USB 3.0/3.2) oferecem taxas de velocidade até 10 vezes maiores que as portas pretas (USB 2.0).",
+                descricao: "Portas universais para dados e energia. As portas azuis (USB 3.0/3.2) transmitem dados até 10 vezes mais rápido que as pretas (USB 2.0).",
                 sinal: "Digital / Dados + Alimentação Elétrica (5V)",
-                velocidade: "USB 2.0 (480 Mbps) | USB 3.2 (Até 5 Gbps / 10 Gbps)",
-                uso: "Pendrives, Teclados, Mouses, Impressoras e HDs Externos"
+                velocidade: "USB 2.0 (480 Mbps) | USB 3.2 (Até 10 Gbps)",
+                uso: "Pendrives, Teclados, Mouses e Impressoras"
             },
             video: {
                 categoria: "Saída de Vídeo de Alta Definição",
                 nome: "Portas HDMI & DisplayPort",
-                descricao: "Conectores responsáveis por enviar sinais de vídeo e áudio digital para monitores, TVs e projetores sem perda de qualidade.",
+                descricao: "Conectores para transmissão de vídeo e áudio digital de alta qualidade para monitores e projetores.",
                 sinal: "Digital (Vídeo + Áudio Multicanal)",
-                velocidade: "HDMI 2.1 (Até 48 Gbps) | DisplayPort 1.4 (32.4 Gbps)",
-                uso: "Monitores Gamer, TVs 4K/8K e Projetores"
+                velocidade: "HDMI 2.1 (Até 48 Gbps) | DisplayPort (32.4 Gbps)",
+                uso: "Monitores Gamer, TVs e Projetores"
             },
             rede: {
                 categoria: "Conectividade de Rede",
                 nome: "Porta RJ-45 (Ethernet LAN / Gigabit)",
-                descricao: "Permite a conexão da CPU com a rede local e a internet via cabo. Possui dois LEDs indicando o status do link e o tráfego de dados.",
+                descricao: "Conecta o computador à internet via cabo de rede. Garante maior estabilidade e menor latência que o Wi-Fi.",
                 sinal: "Digital de Rede",
-                velocidade: "10/100/1000 Mbps (Gigabit Ethernet)",
-                uso: "Cabo de Rede (UTP/Cat5e/Cat6) conectado ao Roteador"
+                velocidade: "10/100/1000 Mbps (Gigabit)",
+                uso: "Cabo de rede conectado ao Roteador/Modem"
             },
             audio: {
                 categoria: "Entrada e Saída de Áudio",
                 nome: "Conectores Áudio Jack P2 (3.5mm)",
-                descricao: "Conectores analógicos de áudio. Verde = Saída de Som (Fone/Caixa de som); Rosa = Entrada de Microfone; Azul = Entrada de Linha (Line-In).",
+                descricao: "Entradas e saídas de áudio: Verde (Saída de Som/Fone), Rosa (Microfone) e Azul (Line-In / Entrada Auxiliar).",
                 sinal: "Analógico de Áudio",
-                velocidade: "Frequência de resposta 20Hz a 20kHz",
+                velocidade: "Frequência de áudio 20Hz a 20kHz",
                 uso: "Fones de Ouvido, Caixas de Som e Microfones"
             }
         };
@@ -490,8 +514,14 @@
 
         function acionarRA() {
             const arEngine = document.getElementById('ar-engine');
-            if (arEngine.canActivateAR) {
-                arEngine.activateAR();
+            
+            // Verifica se o navegador/dispositivo suporta a chamada direta do Model-Viewer AR
+            if (arEngine && typeof arEngine.activateAR === 'function') {
+                try {
+                    arEngine.activateAR();
+                } catch (e) {
+                    document.getElementById('qr-modal').style.display = 'flex';
+                }
             } else {
                 document.getElementById('qr-modal').style.display = 'flex';
             }
