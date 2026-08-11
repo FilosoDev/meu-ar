@@ -17,7 +17,7 @@
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
         }
 
-        /* BANNER SUPERIOR COM INSTRUÇÕES */
+        /* HEADER INFORMATIVO */
         header {
             position: fixed;
             top: 0;
@@ -43,7 +43,7 @@
             opacity: 0.9;
         }
 
-        /* CARD POPUP INFORMATIVO DO CONECTOR */
+        /* CARD POPUP INFORMATIVO DA PORTA */
         .info-card {
             position: fixed;
             bottom: 50px;
@@ -137,116 +137,9 @@
             z-index: 1000;
         }
     </style>
-</head>
-<body style="margin: 0px; overflow: hidden;">
-
-    <header>
-        <h1>🖥️ Painel Traseiro da CPU (I/O Shield)</h1>
-        <p>Aponte para o marcador <strong>HIRO</strong> e toque em qualquer porta para inspecionar</p>
-    </header>
-
-    <!-- POPUP COM INFORMAÇÕES TÉCNICAS DA PORTA -->
-    <div id="info-card" class="info-card">
-        <button class="btn-close" onclick="fecharInfo()">✕</button>
-        <span id="card-tag" class="info-tag">Porta</span>
-        <div id="card-title" class="info-title">Nome do Conector</div>
-        <div id="card-desc" class="info-desc">Descrição funcional.</div>
-        <div id="card-spec" class="info-spec">⚡ <strong>Especificação:</strong> <span id="card-speed">-</span></div>
-    </div>
-
-    <!-- CENA AR -->
-    <a-scene 
-        embedded 
-        arjs="sourceType: webcam; debugUIEnabled: false;"
-        cursor="rayOrigin: mouse" 
-        raycaster="objects: .clickable">
-
-        <!-- MARCADOR HIRO -->
-        <a-marker preset="hiro">
-
-            <!-- ESTRUTURA DO ESPELHO/PAINEL TRASEIRO DA CPU -->
-            <a-entity position="0 0 0" rotation="-90 0 0" scale="1.2 1.2 1.2">
-
-                <!-- 1. PLACA BASE DO ESPELHO METALIZADO (I/O SHIELD) -->
-                <a-box position="0 0 -0.05" width="1.6" height="3.4" depth="0.08" color="#94a3b8" material="metalness: 0.8; roughness: 0.2"></a-box>
-                <a-plane position="0 0 0" width="1.5" height="3.3" color="#1e293b"></a-plane>
-
-                <!-- CONECTOR PS/2 (TECLADO/MOUSE LEGADO) -->
-                <a-entity class="clickable" onclick="exibirInfo('ps2')" position="-0.35 1.2 0.08">
-                    <a-cylinder radius="0.16" height="0.12" color="#9333ea" rotation="90 0 0">
-                        <a-cylinder radius="0.12" height="0.13" color="#16a34a" rotation="0 0 0"></a-cylinder>
-                    </a-cylinder>
-                    <a-text value="PS/2" position="0 -0.25 0" align="center" scale="0.5 0.5 0.5" color="#ffffff"></a-text>
-                </a-entity>
-
-                <!-- PORTA DE VÍDEO VGA (AZUL - DB15) -->
-                <a-entity class="clickable" onclick="exibirInfo('vga')" position="0.35 1.2 0.08">
-                    <a-box width="0.45" height="0.22" depth="0.12" color="#2563eb">
-                        <a-text value="VGA" position="0 0 0.07" align="center" scale="0.4 0.4 0.4" color="#ffffff"></a-text>
-                    </a-box>
-                </a-entity>
-
-                <!-- PORTA DE VÍDEO HDMI (DIGITAL DOURADA) -->
-                <a-entity class="clickable" onclick="exibirInfo('hdmi')" position="-0.35 0.6 0.08">
-                    <a-box width="0.45" height="0.18" depth="0.12" color="#d97706">
-                        <a-text value="HDMI" position="0 0 0.07" align="center" scale="0.4 0.4 0.4" color="#ffffff"></a-text>
-                    </a-box>
-                </a-entity>
-
-                <!-- PORTA DISPLAYPORT -->
-                <a-entity class="clickable" onclick="exibirInfo('displayport')" position="0.35 0.6 0.08">
-                    <a-box width="0.45" height="0.18" depth="0.12" color="#475569">
-                        <a-text value="DP" position="0 0 0.07" align="center" scale="0.4 0.4 0.4" color="#ffffff"></a-text>
-                    </a-box>
-                </a-entity>
-
-                <!-- PORTAS USB 3.0 (DUPLA AZUL) -->
-                <a-entity class="clickable" onclick="exibirInfo('usb3')" position="-0.35 0.0 0.08">
-                    <a-box position="0 0.1 0" width="0.42" height="0.18" depth="0.12" color="#0284c7"></a-box>
-                    <a-box position="0 -0.1 0" width="0.42" height="0.18" depth="0.12" color="#0284c7"></a-box>
-                    <a-text value="USB 3.0" position="0 -0.26 0" align="center" scale="0.4 0.4 0.4" color="#38bdf8"></a-text>
-                </a-entity>
-
-                <!-- PORTA REDE ETHERNET (RJ-45) + USB 2.0 -->
-                <a-entity class="clickable" onclick="exibirInfo('rede')" position="0.35 0.0 0.08">
-                    <a-box position="0 0.12" width="0.45" height="0.22" depth="0.15" color="#b45309">
-                        <a-text value="LAN" position="0 0 0.08" align="center" scale="0.4 0.4 0.4" color="#ffffff"></a-text>
-                    </a-box>
-                    <a-box position="0 -0.1" width="0.42" height="0.16" depth="0.12" color="#334155"></a-box>
-                </a-entity>
-
-                <!-- PORTAS DE ÁUDIO JACK P2 (VERDE, ROSA, AZUL) -->
-                <a-entity class="clickable" onclick="exibirInfo('audio')" position="0 -0.8 0.08">
-                    <!-- Áudio Saída (Verde) -->
-                    <a-cylinder position="0 0.3 0" radius="0.11" height="0.1" color="#22c55e" rotation="90 0 0"></a-cylinder>
-                    <!-- Microfone (Rosa) -->
-                    <a-cylinder position="-0.35 0 0" radius="0.11" height="0.1" color="#ec4899" rotation="90 0 0"></a-cylinder>
-                    <!-- Entrada de Linha (Azul) -->
-                    <a-cylinder position="0.35 0 0" radius="0.11" height="0.1" color="#3b82f6" rotation="90 0 0"></a-cylinder>
-                    <a-text value="AUDIO P2" position="0 -0.22 0" align="center" scale="0.4 0.4 0.4" color="#ffffff"></a-text>
-                </a-entity>
-
-                <!-- FONTE DE ALIMENTAÇÃO (CONECTOR TRIPOULAR AC) -->
-                <a-entity class="clickable" onclick="exibirInfo('fonte')" position="0 -1.3 0.08">
-                    <a-box width="0.9" height="0.3" depth="0.12" color="#0f172a">
-                        <a-text value="ENTRADA DE ENERGIA (AC)" position="0 0 0.07" align="center" scale="0.35 0.35 0.35" color="#ef4444"></a-text>
-                    </a-box>
-                </a-entity>
-
-            </a-entity>
-
-        </a-marker>
-
-        <!-- CÂMERA -->
-        <a-entity camera></a-entity>
-    </a-scene>
-
-    <footer>
-        Objeto de Aprendizagem AR | I/O Shield CPU
-    </footer>
 
     <script>
-        // BASE DE DADOS TÉCNICA DE CADA CONECTOR REAL DA CPU
+        // BASE DE DADOS TÉCNICA DE CADA CONECTOR
         const CONECTORES = {
             ps2: {
                 categoria: "Conector Legado",
@@ -287,7 +180,7 @@
             audio: {
                 categoria: "Interface de Som Analógica",
                 nome: "Painel de Áudio P2 (3.5mm)",
-                descricao: "Verde: Saída de som (Fones/Caixas) | Rosa: Entrada de Microfone | Azul: Line-In (Entrada auxiliar).",
+                descricao: "Verde: Saída de som (Fones/Caixas) | Rosa: Entrada de Microfone | Azul: Line-In.",
                 especificacao: "Sinais de áudio analógico estéreo/Surround"
             },
             fonte: {
@@ -297,6 +190,25 @@
                 especificacao: "Tensão de 110V/220V AC com pino de aterramento"
             }
         };
+
+        // REGISTRO COMPONENTIZADO DO EVENTO DE CLIQUE DO A-FRAME (GARANTE FUNCIONAMENTO EM AR.JS)
+        AFRAME.registerComponent('porta-interativa', {
+            schema: {
+                chave: {type: 'string', default: ''}
+            },
+            init: function () {
+                var el = this.el;
+                var chave = this.data.chave;
+
+                el.addEventListener('click', function () {
+                    exibirInfo(chave);
+                });
+
+                el.addEventListener('touchstart', function () {
+                    exibirInfo(chave);
+                });
+            }
+        });
 
         function exibirInfo(chave) {
             const dados = CONECTORES[chave];
@@ -314,5 +226,95 @@
             document.getElementById('info-card').style.display = 'none';
         }
     </script>
+</head>
+<body style="margin: 0px; overflow: hidden;">
+
+    <header>
+        <h1>🖥️ Painel Traseiro da CPU (I/O Shield)</h1>
+        <p>Aponte para o marcador <strong>HIRO</strong> e toque em qualquer porta para inspecionar</p>
+    </header>
+
+    <!-- POPUP INFORMATIVO -->
+    <div id="info-card" class="info-card">
+        <button class="btn-close" onclick="fecharInfo()">✕</button>
+        <span id="card-tag" class="info-tag">Porta</span>
+        <div id="card-title" class="info-title">Nome do Conector</div>
+        <div id="card-desc" class="info-desc">Descrição funcional.</div>
+        <div id="card-spec" class="info-spec">⚡ <strong>Especificação:</strong> <span id="card-speed">-</span></div>
+    </div>
+
+    <!-- CENA AR -->
+    <a-scene 
+        embedded 
+        arjs="sourceType: webcam; debugUIEnabled: false;">
+
+        <!-- CURSOR DE RAYCASTING PARA CLIQUE VIA CLIQUE/TOQUE -->
+        <a-entity cameraLook-controls>
+            <a-cursor 
+                id="cursor"
+                raycaster="objects: .clickable"
+                cursor="rayOrigin: mouse">
+            </a-cursor>
+        </a-entity>
+
+        <!-- MARCADOR HIRO -->
+        <a-marker preset="hiro">
+
+            <!-- PLACA BASE DO ESPELHO METALIZADO (I/O SHIELD) -->
+            <a-box position="0 0 -0.05" rotation="-90 0 0" width="1.6" height="3.4" depth="0.08" color="#94a3b8" material="metalness: 0.8; roughness: 0.2"></a-box>
+            <a-plane position="0 0.01 0" rotation="-90 0 0" width="1.5" height="3.3" color="#1e293b"></a-plane>
+
+            <!-- 1. CONECTOR PS/2 (TECLADO/MOUSE LEGADO) -->
+            <a-cylinder class="clickable" porta-interativa="chave: ps2" position="-0.35 0.1 1.2" radius="0.16" height="0.12" color="#9333ea" rotation="0 0 0">
+                <a-text value="PS/2" position="0 0.1 0" rotation="-90 0 0" align="center" scale="0.5 0.5 0.5" color="#ffffff"></a-text>
+            </a-cylinder>
+
+            <!-- 2. PORTA DE VÍDEO VGA (AZUL) -->
+            <a-box class="clickable" porta-interativa="chave: vga" position="0.35 0.1 1.2" width="0.45" height="0.12" depth="0.22" color="#2563eb">
+                <a-text value="VGA" position="0 0.07 0" rotation="-90 0 0" align="center" scale="0.4 0.4 0.4" color="#ffffff"></a-text>
+            </a-box>
+
+            <!-- 3. PORTA DE VÍDEO HDMI (DOURADA) -->
+            <a-box class="clickable" porta-interativa="chave: hdmi" position="-0.35 0.1 0.6" width="0.45" height="0.12" depth="0.18" color="#d97706">
+                <a-text value="HDMI" position="0 0.07 0" rotation="-90 0 0" align="center" scale="0.4 0.4 0.4" color="#ffffff"></a-text>
+            </a-box>
+
+            <!-- 4. PORTA DISPLAYPORT -->
+            <a-box class="clickable" porta-interativa="chave: displayport" position="0.35 0.1 0.6" width="0.45" height="0.12" depth="0.18" color="#475569">
+                <a-text value="DP" position="0 0.07 0" rotation="-90 0 0" align="center" scale="0.4 0.4 0.4" color="#ffffff"></a-text>
+            </a-box>
+
+            <!-- 5. PORTAS USB 3.0 (AZUIS) -->
+            <a-box class="clickable" porta-interativa="chave: usb3" position="-0.35 0.1 0.0" width="0.45" height="0.12" depth="0.35" color="#0284c7">
+                <a-text value="USB 3.0" position="0 0.07 0" rotation="-90 0 0" align="center" scale="0.4 0.4 0.4" color="#ffffff"></a-text>
+            </a-box>
+
+            <!-- 6. PORTA REDE ETHERNET (RJ-45) -->
+            <a-box class="clickable" porta-interativa="chave: rede" position="0.35 0.1 0.0" width="0.45" height="0.14" depth="0.3" color="#b45309">
+                <a-text value="LAN" position="0 0.08 0" rotation="-90 0 0" align="center" scale="0.4 0.4 0.4" color="#ffffff"></a-text>
+            </a-box>
+
+            <!-- 7. CONECTORES DE ÁUDIO JACK P2 -->
+            <a-entity class="clickable" porta-interativa="chave: audio" position="0 0.1 -0.8">
+                <a-cylinder position="0 0 0" radius="0.1" height="0.1" color="#22c55e"></a-cylinder>
+                <a-cylinder position="-0.35 0 0" radius="0.1" height="0.1" color="#ec4899"></a-cylinder>
+                <a-cylinder position="0.35 0 0" radius="0.1" height="0.1" color="#3b82f6"></a-cylinder>
+                <a-text value="AUDIO P2" position="0 0.1 -0.2" rotation="-90 0 0" align="center" scale="0.4 0.4 0.4" color="#ffffff"></a-text>
+            </a-entity>
+
+            <!-- 8. FONTE DE ALIMENTAÇÃO (ENERGIA) -->
+            <a-box class="clickable" porta-interativa="chave: fonte" position="0 0.1 -1.3" width="0.9" height="0.12" depth="0.3" color="#0f172a">
+                <a-text value="FONTE AC" position="0 0.07 0" rotation="-90 0 0" align="center" scale="0.35 0.35 0.35" color="#ef4444"></a-text>
+            </a-box>
+
+        </a-marker>
+
+        <!-- CÂMERA -->
+        <a-entity camera></a-entity>
+    </a-scene>
+
+    <footer>
+        Objeto de Aprendizagem AR | I/O Shield CPU
+    </footer>
 </body>
 </html>
