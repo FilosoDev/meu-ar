@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aplicação de Realidade Aumentada (RA) - Injetora de Plásticos SENAI</title>
+    <title>Aplicação de Realidade Aumentada (RA) - Injetora SENAI</title>
     
-    <!-- Componente WebXR / Realidade Aumentada da Google (model-viewer) -->
+    <!-- Componente oficial WebXR / Realidade Aumentada da Google -->
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
 
     <style>
@@ -44,7 +44,7 @@
         }
 
         header h1 {
-            font-size: 1.6rem;
+            font-size: 1.5rem;
             margin-bottom: 0.25rem;
             display: flex;
             align-items: center;
@@ -53,7 +53,7 @@
         }
 
         header p {
-            font-size: 0.9rem;
+            font-size: 0.88rem;
             opacity: 0.9;
         }
 
@@ -95,11 +95,11 @@
             justify-content: space-between;
         }
 
-        /* Área do Viewer de Realidade Aumentada (RA) */
+        /* Container do Visualizador 3D / RA */
         .ar-viewer-container {
             position: relative;
             width: 100%;
-            height: 440px;
+            height: 450px;
             background: radial-gradient(circle, #2c3e50 0%, #0f172a 100%);
             border-radius: var(--border-radius);
             overflow: hidden;
@@ -111,7 +111,32 @@
             --poster-color: transparent;
         }
 
-        /* Estilização dos Hotspots 3D em RA */
+        /* BOTÃO NATIVO DE RA DO MODEL-VIEWER */
+        #custom-ar-button {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 12px 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            z-index: 99;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.4);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: transform 0.2s;
+        }
+
+        #custom-ar-button:hover {
+            transform: scale(1.05);
+        }
+
+        /* Hotspots 3D */
         .Hotspot {
             background: #ffffff;
             border-radius: 32px;
@@ -127,13 +152,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.2s ease;
-        }
-
-        .Hotspot:hover {
-            transform: scale(1.1);
-            background: var(--primary);
-            color: white;
         }
 
         .HotspotAnnotation {
@@ -149,99 +167,12 @@
             z-index: 10;
         }
 
-        .Hotspot:focus .HotspotAnnotation,
         .Hotspot:hover .HotspotAnnotation {
             display: block;
         }
 
-        /* Controles e Overlays de RA */
-        .ar-badge-banner {
-            position: absolute;
-            top: 12px;
-            left: 12px;
-            background: rgba(0,0,0,0.65);
-            backdrop-filter: blur(4px);
-            color: white;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            z-index: 5;
-        }
-
-        /* Botão Visível Forçado de RA */
-        .btn-ar-action {
-            position: absolute;
-            bottom: 45px;
-            right: 16px;
-            background: linear-gradient(135deg, #007bff, #0056b3);
-            color: white;
-            border: none;
-            padding: 10px 18px;
-            border-radius: 24px;
-            font-weight: bold;
-            font-size: 0.85rem;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-            z-index: 20;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: transform 0.2s ease;
-        }
-
-        .btn-ar-action:hover {
-            transform: scale(1.05);
-            background: linear-gradient(135deg, #0056b3, #003d80);
-        }
-
-        .ar-instructions {
-            position: absolute;
-            bottom: 8px;
-            left: 12px;
-            right: 12px;
-            background: rgba(0,0,0,0.75);
-            color: white;
-            padding: 6px 12px;
-            border-radius: 8px;
-            font-size: 0.78rem;
-            text-align: center;
-            pointer-events: none;
-            z-index: 5;
-        }
-
-        /* Modal do QR Code RA para Computador */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top:0; left:0; width:100%; height:100%;
-            background: rgba(0,0,0,0.7);
-            z-index: 2000;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal-card {
-            background: white;
-            padding: 2rem;
-            border-radius: 16px;
-            max-width: 400px;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-        }
-
-        .modal-card h3 { color: var(--primary-dark); margin-bottom: 0.5rem; }
-        .modal-card p { font-size: 0.88rem; color: #555; margin-bottom: 1rem; }
-        .modal-card img { width: 180px; height: 180px; margin-bottom: 1rem; }
-
-        /* Formulários e Sliders */
-        .form-group {
-            margin-bottom: 0.9rem;
-        }
-
+        /* Form & Controls */
+        .form-group { margin-bottom: 0.9rem; }
         .form-group label {
             display: block;
             font-size: 0.82rem;
@@ -264,9 +195,7 @@
             gap: 10px;
         }
 
-        .range-container input[type="range"] {
-            flex: 1;
-        }
+        .range-container input[type="range"] { flex: 1; }
 
         .range-val {
             min-width: 60px;
@@ -278,7 +207,7 @@
             text-align: center;
         }
 
-        /* Status & Botões */
+        /* Status & Buttons */
         .status-badge {
             padding: 0.2rem 0.6rem;
             border-radius: 12px;
@@ -325,7 +254,6 @@
             color: var(--primary-dark);
         }
 
-        /* Diagnóstico */
         .diagnostic-box {
             border-left: 5px solid #6c757d;
             background: #f8f9fa;
@@ -338,7 +266,25 @@
         .diagnostic-box.erro { border-left-color: var(--danger); }
         .diagnostic-box.alerta { border-left-color: var(--warning); }
 
-        /* Rodapé Obrigatório */
+        /* Modal para Computadores */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.75);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            max-width: 420px;
+            text-align: center;
+        }
+
         footer {
             position: fixed;
             bottom: 0;
@@ -351,84 +297,72 @@
             font-size: 0.8rem;
             z-index: 1000;
         }
-
-        footer strong { color: white; }
     </style>
 </head>
 <body>
 
     <header>
-        <h1><span>📱</span> Objeto de Aprendizagem em Realidade Aumentada (RA)</h1>
-        <p>Injetoras para Plásticos • Simulação 3D/RA & Calibração de Parâmetros</p>
+        <h1><span>📱</span> Objeto de Aprendizagem em RA</h1>
+        <p>Injetoras para Plásticos • Simulação 3D/RA & Calibração IHM</p>
     </header>
 
     <div class="container">
         <div class="app-grid">
 
-            <!-- ÁREA PRINCIPAL: VISUALIZADOR 3D / REALIDADE AUMENTADA -->
             <section>
                 <div class="card">
                     <div class="card-title">
-                        <span>1. Projeção em Realidade Aumentada (RA)</span>
-                        <span id="ar-status" class="status-badge status-conforme">RA Habilitada</span>
+                        <span>1. Projeção em Realidade Aumentada</span>
+                        <span id="ar-status" class="status-badge status-conforme">3D Interativo</span>
                     </div>
 
                     <div class="ar-viewer-container">
-                        <div class="ar-badge-banner">
-                            <span>📷</span> Câmera / Projeção no Espaço
-                        </div>
-
-                        <!-- Botão Visível Garantido -->
-                        <button class="btn-ar-action" onclick="abrirRA()">
-                            📱 Ver em Realidade Aumentada (RA)
-                        </button>
-
-                        <!-- Componente Model Viewer -->
+                        <!-- Componente HTML oficial de Realidade Aumentada -->
                         <model-viewer 
                             id="injetora-ar"
                             src="https://modelviewer.dev/shared-assets/models/Astronaut.glb"
-                            alt="Modelo 3D/RA da Injetora e Molde"
+                            alt="Modelo 3D/RA da Injetora"
                             ar
                             ar-modes="webxr scene-viewer quick-look"
                             camera-controls
                             touch-action="pan-y"
                             shadow-intensity="1"
-                            exposure="1"
                             autoplay>
                             
-                            <!-- Hotspots 3D Interativos -->
+                            <!-- Botão Customizado NATIVO de RA do Model Viewer -->
+                            <button slot="ar-button" id="custom-ar-button">
+                                📱 PROJETAR NO SEU ESPAÇO (RA)
+                            </button>
+
+                            <!-- Hotspots 3D -->
                             <button class="Hotspot" slot="hotspot-1" data-position="0 1.6 0.1" data-normal="0 0 1">
-                                1. Funil & Dosador
-                                <div class="HotspotAnnotation">Alimentação do polímero em grãos e dosagem do aditivo.</div>
+                                1. Funil
+                                <div class="HotspotAnnotation">Alimentação do polímero em grãos.</div>
                             </button>
 
                             <button class="Hotspot" slot="hotspot-2" data-position="0 1.2 0" data-normal="0 0 1">
-                                2. Canhão Térmico
-                                <div class="HotspotAnnotation">Zonas de aquecimento e rosca de plastificação.</div>
+                                2. Canhão
+                                <div class="HotspotAnnotation">Aquecimento e plastificação.</div>
                             </button>
 
                             <button class="Hotspot" slot="hotspot-3" data-position="0 0.8 0" data-normal="0 0 1">
-                                3. Unidade do Molde
-                                <div class="HotspotAnnotation">Cavidades, canais de resfriamento e extratores.</div>
+                                3. Molde
+                                <div class="HotspotAnnotation">Cavidade e resfriamento da peça.</div>
                             </button>
                         </model-viewer>
-
-                        <div class="ar-instructions">
-                            💡 <strong>Gire e dê zoom</strong> no modelo 3D. Clique no botão azul para projetar com a câmera.
-                        </div>
                     </div>
                 </div>
 
                 <!-- DIAGNÓSTICO DO PROCESSO -->
                 <div class="card">
                     <div class="card-title">
-                        <span>2. Inspeção de Qualidade & Diagnóstico da Peça</span>
+                        <span>2. Diagnóstico da Moldagem</span>
                     </div>
 
                     <div id="diagnostic-result" class="diagnostic-box alerta">
-                        <strong id="diag-status-title">Aguardando Início do Ciclo</strong>
+                        <strong id="diag-status-title">Aguardando Execução do Ciclo</strong>
                         <p id="diag-status-desc" style="font-size: 0.85rem; margin-top: 4px;">
-                            Ajuste os parâmetros no painel lateral e clique em "Executar Ciclo de Injeção" para analisar o resultado da moldagem em RA.
+                            Configure a temperatura e pressões ao lado e clique em "Executar Ciclo de Injeção" para analisar se haverá defeitos na peça.
                         </p>
                     </div>
                 </div>
@@ -436,19 +370,18 @@
 
             <!-- PAINEL LATERAL: CÁLCULOS E CONTROLE IHM -->
             <aside>
-                <!-- Bloco de Polímero -->
                 <div class="card">
                     <div class="card-title">
-                        <span>Seleção de Material</span>
+                        <span>Seleção do Polímero</span>
                     </div>
 
                     <div class="form-group">
-                        <label for="material-select">Polímero Termoplástico:</label>
+                        <label for="material-select">Material Termoplástico:</label>
                         <select id="material-select" onchange="atualizarMaterial()">
-                            <option value="PP">Polipropileno (PP) - Semi-cristalino</option>
-                            <option value="ABS">ABS - Amorfo</option>
-                            <option value="PA66">Poliamida 6.6 (PA66) - Polímero de Engenharia</option>
-                            <option value="PS">Poliestireno (PS) - Amorfo</option>
+                            <option value="PP">Polipropileno (PP)</option>
+                            <option value="ABS">ABS</option>
+                            <option value="PA66">Poliamida 6.6 (PA66)</option>
+                            <option value="PS">Poliestireno (PS)</option>
                         </select>
                     </div>
 
@@ -458,14 +391,13 @@
                     </div>
                 </div>
 
-                <!-- Painel de Controle IHM -->
                 <div class="card">
                     <div class="card-title">
-                        <span>Parâmetros de Processo (CLP)</span>
+                        <span>Parâmetros de Processo (IHM)</span>
                     </div>
 
                     <div class="form-group">
-                        <label>Temperatura Média do Canhão (°C):</label>
+                        <label>Temperatura do Canhão (°C):</label>
                         <div class="range-container">
                             <input type="range" id="temp-canhao" min="150" max="320" value="210" oninput="atualizarIHM()">
                             <span id="val-temp" class="range-val">210 °C</span>
@@ -489,7 +421,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label>Força de Travamento Injetora (Ton):</label>
+                        <label>Força de Travamento (Ton):</label>
                         <div class="range-container">
                             <input type="range" id="forca-trava" min="20" max="200" value="80" step="5" oninput="atualizarIHM()">
                             <span id="val-trava" class="range-val">80 Ton</span>
@@ -504,11 +436,12 @@
                         </div>
                     </div>
 
-                    <button class="btn btn-success" onclick="simularInjecaoRA()">
-                        ▶ Executar Ciclo de Injeção em RA
+                    <!-- Botão de simulação matemática do ciclo -->
+                    <button class="btn btn-success" onclick="simularInjecaoEAtivarRA()">
+                        ▶ Executar Ciclo de Injeção & Testar RA
                     </button>
                     <button class="btn btn-secondary" onclick="resetarPadrao()">
-                        🔄 Restaurar Parâmetros Padrão
+                        🔄 Parâmetros Padrão
                     </button>
                 </div>
             </aside>
@@ -516,18 +449,22 @@
         </div>
     </div>
 
-    <!-- MODAL QR CODE SE ESTIVER NO PC -->
+    <!-- MODAL INFORMATIVO CASO O DISPOSITIVO NÃO TENHA CÂMERA/ARCORE -->
     <div id="qr-modal" class="modal-overlay" onclick="fecharModal()">
         <div class="modal-card" onclick="event.stopPropagation()">
-            <h3>📱 Projetar em Realidade Aumentada</h3>
-            <p>Aponte a câmera do seu celular para o QR Code abaixo para abrir a câmera e projetar o modelo na sua mesa/sala:</p>
-            <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://modelviewer.dev/examples/augmentedreality/" alt="QR Code RA">
-            <br>
-            <button class="btn btn-secondary" onclick="fecharModal()">Fechar</button>
+            <h3 style="color:#0056b3; margin-bottom:10px;">📷 Como visualizar na Câmera (RA)</h3>
+            <p style="font-size:0.88rem; color:#555; margin-bottom:15px;">
+                Para projetar a peça no chão ou mesa com Realidade Aumentada:
+            </p>
+            <ol style="text-align:left; font-size:0.85rem; margin-left:20px; color:#333; line-height:1.6;">
+                <li>Acesse esta página diretamente pelo <strong>celular (Android ou iPhone)</strong>.</li>
+                <li>Certifique-se de que o site está rodando em endereço seguro (<strong>https://</strong>).</li>
+                <li>Clique no botão azul <strong>"PROJETAR NO SEU ESPAÇO"</strong> que fica sobre o modelo 3D.</li>
+            </ol>
+            <button class="btn btn-secondary" style="margin-top:20px;" onclick="fecharModal()">Entendi</button>
         </div>
     </div>
 
-    <!-- Rodapé Obrigatório -->
     <footer>
         Modelo Hiro | Objeto de Aprendizagem baseado no Plano de Curso
     </footer>
@@ -543,17 +480,6 @@
         window.onload = function() {
             atualizarMaterial();
         };
-
-        function abrirRA() {
-            const mv = document.getElementById('injetora-ar');
-            // Se o navegador suporta ativação direta de RA (celulares)
-            if (mv.canActivateAR) {
-                mv.activateAR();
-            } else {
-                // Se estiver no computador, exibe modal com instrução e QR Code
-                document.getElementById('qr-modal').style.display = 'flex';
-            }
-        }
 
         function fecharModal() {
             document.getElementById('qr-modal').style.display = 'none';
@@ -586,7 +512,8 @@
             document.getElementById('val-resfr').innerText = document.getElementById('tempo-resfr').value + " s";
         }
 
-        function simularInjecaoRA() {
+        function simularInjecaoEAtivarRA() {
+            // 1. Executa a lógica de simulação técnica
             const matKey = document.getElementById('material-select').value;
             const mat = MATERIAIS[matKey];
 
@@ -604,34 +531,41 @@
             if (fTrava < fNec) {
                 box.className = "diagnostic-box erro";
                 title.innerText = "⚠️ Defeito: Rebarba (Flash)";
-                desc.innerText = `A força de travamento da máquina (${fTrava} Ton) é menor que o necessário (${fNec.toFixed(1)} Ton). A pressão abriu o molde e gerou rebarbas.`;
+                desc.innerText = `A força de travamento (${fTrava} Ton) é menor que a necessária (${fNec.toFixed(1)} Ton). O molde abriu.`;
             } else if (temp > mat.tempMax) {
                 box.className = "diagnostic-box erro";
-                title.innerText = "🔥 Defeito: Queimadura / Degradação Térmica";
-                desc.innerText = `A temperatura do canhão (${temp}°C) excedeu o limite máximo recomendado para o ${matKey} (${mat.tempMax}°C).`;
+                title.innerText = "🔥 Defeito: Queimadura no Material";
+                desc.innerText = `A temperatura do canhão (${temp}°C) superou o máximo permitido (${mat.tempMax}°C).`;
             } else if (pInj < mat.pressaoMin || temp < mat.tempMin) {
                 box.className = "diagnostic-box alerta";
                 title.innerText = "❌ Defeito: Peça Incompleta";
-                desc.innerText = `Pressão de injeção ou fluidez insuficiente para preencher toda a cavidade em RA.`;
+                desc.innerText = `Pressão de injeção ou temperatura insuficiente para preenchimento.`;
             } else if (pRec < mat.recalqueMin || tResfr < mat.resfrMin) {
                 box.className = "diagnostic-box alerta";
                 title.innerText = "📉 Defeito: Chupagem / Contração";
-                desc.innerText = `Pressão de recalque insuficiente (${pRec} bar) ou tempo de resfriamento muito baixo (${tResfr}s).`;
+                desc.innerText = `Falta de recalque (${pRec} bar) ou tempo de resfriamento reduzido.`;
             } else {
                 box.className = "diagnostic-box conforme";
-                title.innerText = "✅ Peça Conforme e Processo Otimizado!";
-                desc.innerText = `Parâmetros perfeitamente calibrados para o material ${matKey}. O modelo 3D/RA injetou com total estabilidade dimensional.`;
+                title.innerText = "✅ Peça Conforme!";
+                desc.innerText = `Parâmetros calibrados corretamente para ${matKey}.`;
+            }
+
+            // 2. Tenta acionar a câmera RA ou exibe instruções
+            const viewer = document.getElementById('injetora-ar');
+            if (viewer.canActivateAR) {
+                viewer.activateAR();
+            } else {
+                document.getElementById('qr-modal').style.display = 'flex';
             }
         }
 
         function resetarPadrao() {
             document.getElementById('material-select').value = 'PP';
             atualizarMaterial();
-            
             const box = document.getElementById('diagnostic-result');
             box.className = "diagnostic-box alerta";
-            document.getElementById('diag-status-title').innerText = "Aguardando Início do Ciclo";
-            document.getElementById('diag-status-desc').innerText = "Parâmetros redefinidos para os valores padrão.";
+            document.getElementById('diag-status-title').innerText = "Aguardando Execução do Ciclo";
+            document.getElementById('diag-status-desc').innerText = "Parâmetros redefinidos.";
         }
     </script>
 </body>
