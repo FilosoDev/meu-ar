@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Objeto de Aprendizagem - CPU AR Hiro</title>
+    <title>Objeto de Aprendizagem AR - Painel Traseiro da CPU</title>
 
-    <!-- Bibliotecas A-Frame e AR.js para identificação do Marcador Hiro -->
+    <!-- Bibliotecas A-Frame e AR.js -->
     <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
 
@@ -14,94 +14,114 @@
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        /* PAINEL SUPERIOR COM INSTRUÇÕES */
+        /* BANNER SUPERIOR COM INSTRUÇÕES */
         header {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
-            background: rgba(15, 23, 42, 0.9);
-            color: white;
-            padding: 12px 16px;
+            background: rgba(15, 23, 42, 0.95);
+            color: #ffffff;
+            padding: 12px;
             text-align: center;
             z-index: 1000;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+            border-bottom: 2px solid #3b82f6;
         }
 
         header h1 {
             font-size: 1.1rem;
-            margin-bottom: 2px;
+            margin-bottom: 3px;
+            color: #60a5fa;
         }
 
         header p {
-            font-size: 0.8rem;
-            opacity: 0.85;
+            font-size: 0.82rem;
+            opacity: 0.9;
         }
 
-        /* CARD DE INFORMAÇÃO FLUTUANTE AO CLICAR NA PORTA */
+        /* CARD POPUP INFORMATIVO */
         .info-card {
             position: fixed;
-            bottom: 60px;
+            bottom: 50px;
             left: 50%;
             transform: translateX(-50%);
             width: 90%;
-            max-width: 450px;
-            background: white;
+            max-width: 420px;
+            background: #ffffff;
             border-radius: 12px;
-            padding: 16px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+            padding: 18px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             z-index: 1000;
             display: none;
-            border-top: 4px solid #0d6efd;
+            border-left: 6px solid #2563eb;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { transform: translate(-50%, 20px); opacity: 0; }
+            to { transform: translate(-50%, 0); opacity: 1; }
         }
 
         .info-tag {
             display: inline-block;
-            background: #e0e7ff;
-            color: #3730a3;
+            background: #dbeafe;
+            color: #1e40af;
             font-size: 0.75rem;
-            font-weight: bold;
-            padding: 2px 8px;
-            border-radius: 10px;
-            margin-bottom: 6px;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
         }
 
         .info-title {
-            font-size: 1.1rem;
-            font-weight: bold;
+            font-size: 1.15rem;
+            font-weight: 700;
             color: #0f172a;
             margin-bottom: 6px;
         }
 
         .info-desc {
-            font-size: 0.85rem;
-            color: #475569;
-            line-height: 1.4;
-            margin-bottom: 8px;
+            font-size: 0.88rem;
+            color: #334155;
+            line-height: 1.45;
+            margin-bottom: 10px;
         }
 
         .info-spec {
-            font-size: 0.8rem;
+            font-size: 0.82rem;
             color: #1e293b;
-            border-top: 1px dashed #cbd5e1;
-            padding-top: 6px;
+            background: #f8fafc;
+            padding: 8px 10px;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
         }
 
         .btn-close {
             position: absolute;
-            top: 10px;
+            top: 12px;
             right: 12px;
             background: #f1f5f9;
             border: none;
-            width: 24px;
-            height: 24px;
+            width: 28px;
+            height: 28px;
             border-radius: 50%;
             font-weight: bold;
             cursor: pointer;
             color: #64748b;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-close:hover {
+            background: #e2e8f0;
+            color: #0f172a;
         }
 
         footer {
@@ -110,9 +130,9 @@
             left: 0;
             width: 100%;
             background-color: #0f172a;
-            color: #adb5bd;
+            color: #94a3b8;
             text-align: center;
-            padding: 0.5rem;
+            padding: 6px;
             font-size: 0.75rem;
             z-index: 1000;
         }
@@ -121,67 +141,74 @@
 <body style="margin: 0px; overflow: hidden;">
 
     <header>
-        <h1>🖥️ Painel Traseiro da CPU em Realidade Aumentada</h1>
-        <p>Aponta a câmera para a imagem <strong>HIRO</strong> e toque em uma porta para inspecionar</p>
+        <h1>🖥️ Realidade Aumentada - Painel Traseiro da CPU</h1>
+        <p>Aponte a câmera para o marcador <strong>HIRO</strong> e toque nas esferas numeradas</p>
     </header>
 
-    <!-- CARD POPUP DE DETALHES -->
+    <!-- CARD POPUP DE DETALHES DAS PORTAS -->
     <div id="info-card" class="info-card">
         <button class="btn-close" onclick="fecharInfo()">✕</button>
         <span id="card-tag" class="info-tag">Porta</span>
         <div id="card-title" class="info-title">Nome da Porta</div>
         <div id="card-desc" class="info-desc">Descrição técnica.</div>
-        <div id="card-spec" class="info-spec"><strong>Velocidade:</strong> <span id="card-speed">-</span></div>
+        <div id="card-spec" class="info-spec">⚡ <strong>Recurso Técnico:</strong> <span id="card-speed">-</span></div>
     </div>
 
-    <!-- CENA DE REALIDADE AUMENTADA (A-FRAME + AR.JS) -->
+    <!-- CENA AR (A-FRAME) -->
     <a-scene 
         embedded 
         arjs="sourceType: webcam; debugUIEnabled: false;"
         cursor="rayOrigin: mouse" 
         raycaster="objects: .clickable">
 
+        <a-assets>
+            <!-- Carregamento do Modelo 3D de Computador (GLTF/GLB) -->
+            <a-asset-item id="pc-model" src="https://raw.githack.com/KhronosGroup/glTF-Sample-Assets/main/Models/Computer/glTF-Binary/Computer.glb"></a-asset-item>
+        </a-assets>
+
         <!-- MARCADOR HIRO -->
         <a-marker preset="hiro">
 
-            <!-- ESPELHO / PLACA TRASEIRA DA CPU -->
-            <a-entity position="0 0 0" rotation="-90 0 0" scale="1 1 1">
-                
-                <!-- Placa base prateada metalizada -->
-                <a-plane position="0 0 0" width="1.8" height="3.2" color="#64748b" material="metalness: 0.5; roughness: 0.3"></a-plane>
-                <a-plane position="0 0 0.01" width="1.7" height="3.1" color="#475569"></a-plane>
+            <!-- GRUPO DO MODELO 3D + HOTSPOTS -->
+            <a-entity position="0 0 0" rotation="0 0 0" scale="0.8 0.8 0.8">
 
-                <!-- 1. CONECTOR PS/2 (ROXO / VERDE) -->
-                <a-cylinder class="clickable" onclick="exibirInfo('ps2')" position="-0.4 1.1 0.08" radius="0.18" height="0.12" color="#a855f7" rotation="90 0 0">
-                    <a-text value="1" position="0 0.2 0" align="center" scale="1.5 1.5 1.5" color="#ffffff"></a-text>
-                </a-cylinder>
-
-                <!-- 2. PORTAS USB 3.0 (AZUIS) -->
-                <a-box class="clickable" onclick="exibirInfo('usb')" position="0.3 0.6 0.08" width="0.5" height="0.22" depth="0.12" color="#0284c7">
-                    <a-text value="2" position="0 0.25 0" align="center" scale="1.5 1.5 1.5" color="#ffffff"></a-text>
-                </a-box>
-                <a-box class="clickable" onclick="exibirInfo('usb')" position="0.3 0.2 0.08" width="0.5" height="0.22" depth="0.12" color="#0284c7"></a-box>
-
-                <!-- 3. SAÍDAS DE VÍDEO (HDMI / DISPLAYPORT - DOURADO / CINZA) -->
-                <a-box class="clickable" onclick="exibirInfo('video')" position="-0.3 0.1 0.08" width="0.6" height="0.18" depth="0.1" color="#eab308">
-                    <a-text value="3" position="0 0.22 0" align="center" scale="1.5 1.5 1.5" color="#ffffff"></a-text>
-                </a-box>
-
-                <!-- 4. REDE RJ-45 ETHERNET -->
-                <a-box class="clickable" onclick="exibirInfo('rede')" position="0.3 -0.3 0.08" width="0.45" height="0.3" depth="0.15" color="#d97706">
-                    <a-text value="4" position="0 0.25 0" align="center" scale="1.5 1.5 1.5" color="#ffffff"></a-text>
-                </a-box>
-
-                <!-- 5. ÁUDIO P2 (JACKS COLORIDOS) -->
-                <a-entity class="clickable" onclick="exibirInfo('audio')" position="0 -1.0 0.08">
-                    <a-cylinder position="-0.4 0 0" radius="0.1" height="0.1" color="#22c55e" rotation="90 0 0"></a-cylinder>
-                    <a-cylinder position="0 0 0" radius="0.1" height="0.1" color="#ec4899" rotation="90 0 0">
-                        <a-text value="5" position="0 0.25 0" align="center" scale="1.5 1.5 1.5" color="#ffffff"></a-text>
-                    </a-cylinder>
-                    <a-cylinder position="0.4 0 0" radius="0.1" height="0.1" color="#3b82f6" rotation="90 0 0"></a-cylinder>
+                <!-- Gabinete 3D em Realidade Aumentada -->
+                <a-entity 
+                    gltf-model="#pc-model" 
+                    position="0 0 0" 
+                    rotation="0 180 0" 
+                    scale="1.5 1.5 1.5">
                 </a-entity>
 
+                <!-- HOTSPOTS INTERATIVOS (PONTOS DE CLIQUE) POSICIONADOS NO PAINEL TRASEIRO -->
+
+                <!-- 1. Fonte de Alimentação (Energia) -->
+                <a-sphere class="clickable" onclick="exibirInfo('fonte')" position="0 1.2 -0.3" radius="0.12" color="#ef4444" opacity="0.85">
+                    <a-text value="1" position="0 0 0.15" align="center" scale="1.2 1.2 1.2" color="#ffffff"></a-text>
+                </a-sphere>
+
+                <!-- 2. Portas de Vídeo (HDMI / DisplayPort) -->
+                <a-sphere class="clickable" onclick="exibirInfo('video')" position="-0.25 0.6 -0.3" radius="0.12" color="#eab308" opacity="0.85">
+                    <a-text value="2" position="0 0 0.15" align="center" scale="1.2 1.2 1.2" color="#ffffff"></a-text>
+                </a-sphere>
+
+                <!-- 3. Portas USB (Periféricos e Dados) -->
+                <a-sphere class="clickable" onclick="exibirInfo('usb')" position="0.25 0.6 -0.3" radius="0.12" color="#3b82f6" opacity="0.85">
+                    <a-text value="3" position="0 0 0.15" align="center" scale="1.2 1.2 1.2" color="#ffffff"></a-text>
+                </a-sphere>
+
+                <!-- 4. Rede Ethernet (RJ-45) -->
+                <a-sphere class="clickable" onclick="exibirInfo('rede')" position="-0.25 0.2 -0.3" radius="0.12" color="#10b981" opacity="0.85">
+                    <a-text value="4" position="0 0 0.15" align="center" scale="1.2 1.2 1.2" color="#ffffff"></a-text>
+                </a-sphere>
+
+                <!-- 5. Conectores de Áudio (P2/Jack) -->
+                <a-sphere class="clickable" onclick="exibirInfo('audio')" position="0.25 0.2 -0.3" radius="0.12" color="#ec4899" opacity="0.85">
+                    <a-text value="5" position="0 0 0.15" align="center" scale="1.2 1.2 1.2" color="#ffffff"></a-text>
+                </a-sphere>
+
             </a-entity>
+
         </a-marker>
 
         <!-- CÂMERA -->
@@ -189,41 +216,41 @@
     </a-scene>
 
     <footer>
-        Modelo Hiro | Objeto de Aprendizagem baseado no Plano de Curso
+        Objeto de Aprendizagem AR | Marcador Hiro
     </footer>
 
     <script>
-        // DADOS DOS CONECTORES
+        // BASE DE DADOS DOS CONECTORES TRASEIROS
         const CONECTORES = {
-            ps2: {
-                categoria: "Conector Legado",
-                nome: "Porta PS/2 Combo",
-                descricao: "Conector circular de 6 pinos para teclado (roxo) ou mouse (verde).",
-                velocidade: "Baixa latência (Interrupção direta)"
-            },
-            usb: {
-                categoria: "Comunicação & Periféricos",
-                nome: "Portas USB 3.0 / 3.2",
-                descricao: "Portas de alta velocidade para conectar pendrives, HDs externos, teclados e mouses.",
-                velocidade: "Até 5 Gbps / 10 Gbps"
+            fonte: {
+                categoria: "Alimentação Elétrica",
+                nome: "Entrada da Fonte (AC Power)",
+                descricao: "Conecta o cabo de força tripolar à fonte de alimentação para suprir energia elétrica a todos os componentes internos da CPU.",
+                especificacao: "Tensões: 110V / 220V AC (Frequência: 50/60Hz)"
             },
             video: {
-                categoria: "Saída de Vídeo",
-                nome: "Porta HDMI / DisplayPort",
-                descricao: "Transmite sinal de vídeo e áudio digital para monitores, TVs e projetores.",
-                velocidade: "HDMI 2.1 (até 48 Gbps) / DP 1.4"
+                categoria: "Saída de Vídeo / Exibição",
+                nome: "Portas HDMI & DisplayPort",
+                descricao: "Enviam sinais digitais de áudio e vídeo de alta definição para monitores, TVs ou projetores.",
+                especificacao: "Suporte a resoluções Full HD, 4K e altas taxas de atualização (Hz)"
+            },
+            usb: {
+                categoria: "Barramento Universal (E/S)",
+                nome: "Portas USB 3.0 / 3.2",
+                descricao: "Utilizadas para conectar periféricos como teclado, mouse, pen drives, HDs externos e impressoras.",
+                especificacao: "Taxas de transferência de até 5 Gbps (USB 3.0) ou 10 Gbps (USB 3.2)"
             },
             rede: {
                 categoria: "Conectividade de Rede",
                 nome: "Porta RJ-45 (Ethernet LAN)",
-                descricao: "Conecta a CPU ao roteador via cabo de rede para acesso à internet.",
-                velocidade: "10/100/1000 Mbps (Gigabit)"
+                descricao: "Permite a conexão física via cabo de rede UTP ao roteador ou switch para acesso à internet e redes locais.",
+                especificacao: "Padrão Gigabit Ethernet (10/100/1000 Mbps)"
             },
             audio: {
-                categoria: "Saída/Entrada de Áudio",
+                categoria: "Entrada e Saída de Áudio",
                 nome: "Conectores Jack P2 (3.5mm)",
-                descricao: "Conectores de som: Verde (Fone/Caixa de som), Rosa (Microfone) e Azul (Line-In).",
-                velocidade: "Sinal Analógico de Áudio"
+                descricao: "Portas analógicas para som: Verde (Saída de Áudio/Caixas de som), Rosa (Microfone) e Azul (Entrada de Linha/Auxiliar).",
+                especificacao: "Sinal de Áudio Analógico Estéreo"
             }
         };
 
@@ -234,7 +261,7 @@
             document.getElementById('card-tag').innerText = dados.categoria;
             document.getElementById('card-title').innerText = dados.nome;
             document.getElementById('card-desc').innerText = dados.descricao;
-            document.getElementById('card-speed').innerText = dados.velocidade;
+            document.getElementById('card-speed').innerText = dados.especificacao;
 
             document.getElementById('info-card').style.display = 'block';
         }
