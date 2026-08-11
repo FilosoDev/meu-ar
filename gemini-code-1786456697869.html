@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Objeto de Aprendizagem - Painel Traseiro da CPU</title>
+    
+    <!-- Componente WebXR / 3D da Google -->
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
+
+    <style>
+        :root {
+            --primary: #0d6efd;
+            --primary-dark: #0a58ca;
+            --secondary: #198754;
+            --dark: #121212;
+            --card-bg: #ffffff;
+            --border-radius: 12px;
+            --box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: #f0f4f8;
+            color: #212529;
+            line-height: 1.5;
+            padding-bottom: 70px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            color: white;
+            padding: 1.25rem 1rem;
+            text-align: center;
+            box-shadow: var(--box-shadow);
+        }
+
+        header h1 {
+            font-size: 1.5rem;
+            margin-bottom: 0.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        header p {
+            font-size: 0.88rem;
+            opacity: 0.85;
+        }
+
+        .container {
+            max-width: 1250px;
+            margin: 1.25rem auto;
+            padding: 0 1rem;
+        }
+
+        .app-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.25rem;
+        }
+
+        @media (min-width: 992px) {
+            .app-grid {
+                grid-template-columns: 1fr 400px;
+            }
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 1.25rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .card-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            border-bottom: 2px solid #eef2f5;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Container do Viewer 3D */
+        .viewer-container {
+            position: relative;
+            width: 100%;
+            height: 480px;
+            background: radial-gradient(circle, #334155 0%, #0f172a 100%);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+        }
+
+        model-viewer {
+            width: 100%;
+            height: 100%;
+            --poster-color: transparent;
+        }
+
+        /* Estilização dos Pins Interativos (Hotspots) */
+        .Hotspot {
+            background: #ffffff;
+            border-radius: 50%;
+            border: 3px solid var(--primary);
+            box-shadow: 0 0 12px rgba(13, 110, 253, 0.6);
+            cursor: pointer;
+            height: 28px;
+            width: 28px;
+            font-weight: bold;
+            font-size: 0.8rem;
+            color: var(--primary-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .Hotspot:hover, .Hotspot.active {
+            transform: scale(1.25);
+            background: var(--primary);
+            color: white;
+            border-color: #ffffff;
+        }
+
+        /* Painel Explicativo Lateral */
+        .info-box {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1.25rem;
+        }
+
+        .info-tag {
+            display: inline-block;
+            background: #e0e7ff;
+            color: #3730a3;
+            font-size: 0.75rem;
+            font-weight: bold;
+            padding: 3px 8px;
+            border-radius: 12px;
+            margin-bottom: 0.75rem;
+        }
+
+        .info-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #0f172a;
+            margin-bottom: 0.5rem;
+        }
+
+        .info-detail {
+            font-size: 0.88rem;
+            color: #475569;
+            margin-bottom: 0.75rem;
+            line-height: 1.5;
+        }
+
+        .specs-list {
+            list-style: none;
+            border-top: 1px dashed #cbd5e1;
+            padding-top: 0.75rem;
+            margin-top: 0.75rem;
+        }
+
+        .specs-list li {
+            font-size: 0.82rem;
+            margin-bottom: 0.4rem;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .specs-list strong {
+            color: #334155;
+        }
+
+        .instructions-hint {
+            position: absolute;
+            bottom: 12px;
+            left: 12px;
+            right: 12px;
+            background: rgba(15, 23, 42, 0.8);
+            color: white;
+            padding: 8px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            text-align: center;
+            pointer-events: none;
+        }
+
+        footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: var(--dark);
+            color: #adb5bd;
+            text-align: center;
+            padding: 0.75rem;
+            font-size: 0.8rem;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1><span>🖥️</span> Hardware: Painel Traseiro da CPU</h1>
+        <p>Objeto de Aprendizagem Interativo • Mapeamento de Conectores e Portas E/S</p>
+    </header>
+
+    <div class="container">
+        <div class="app-grid">
+
+            <!-- ÁREA VISUALIZADORA 3D -->
+            <section>
+                <div class="card">
+                    <div class="card-title">Visão Traseira da Placa-Mãe / CPU</div>
+
+                    <div class="viewer-container">
+                        <model-viewer 
+                            id="cpu-viewer"
+                            src="https://modelviewer.dev/shared-assets/models/Astronaut.glb"
+                            alt="Painel Traseiro de CPU"
+                            camera-controls
+                            touch-action="pan-y"
+                            shadow-intensity="1"
+                            autoplay>
+                            
+                            <!-- Hotspot 1: Portas USB 2.0 / 3.0 -->
+                            <button class="Hotspot" slot="hotspot-usb" data-position="0 1.6 0.1" data-normal="0 0 1" onclick="exibirInfo('usb')">
+                                1
+                            </button>
+
+                            <!-- Hotspot 2: Saída HDMI / DisplayPort -->
+                            <button class="Hotspot" slot="hotspot-video" data-position="0 1.2 0" data-normal="0 0 1" onclick="exibirInfo('video')">
+                                2
+                            </button>
+
+                            <!-- Hotspot 3: Rede RJ-45 Ethernet -->
+                            <button class="Hotspot" slot="hotspot-rede" data-position="0 0.8 0" data-normal="0 0 1" onclick="exibirInfo('rede')">
+                                3
+                            </button>
+
+                            <!-- Hotspot 4: Conectores P2 Áudio -->
+                            <button class="Hotspot" slot="hotspot-audio" data-position="0 0.4 0" data-normal="0 0 1" onclick="exibirInfo('audio')">
+                                4
+                            </button>
+                        </model-viewer>
+
+                        <div class="instructions-hint">
+                            💡 <strong>Clique nos pontos numerados (1, 2, 3, 4)</strong> na peça 3D para inspecionar cada conector.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PAINEL DE INFORMAÇÕES TÉCNICAS -->
+            <aside>
+                <div class="card">
+                    <div class="card-title">Detalhamento do Conector</div>
+
+                    <div id="info-panel" class="info-box">
+                        <span class="info-tag" id="port-category">Selecione uma Porta</span>
+                        <div class="info-title" id="port-name">Clique em um ponto na CPU</div>
+                        <div class="info-detail" id="port-desc">
+                            Clique sobre um dos números marcados na imagem 3D ao lado para ver a função, velocidade de transmissão e equipamentos compatíveis com o conector.
+                        </div>
+
+                        <ul class="specs-list" id="port-specs" style="display: none;">
+                            <li><strong>Tipo de Sinal:</strong> <span id="spec-signal">-</span></li>
+                            <li><strong>Taxa de Transmissão:</strong> <span id="spec-speed">-</span></li>
+                            <li><strong>Uso Principal:</strong> <span id="spec-use">-</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </aside>
+
+        </div>
+    </div>
+
+    <footer>
+        Modelo Hiro | Objeto de Aprendizagem baseado no Plano de Curso
+    </footer>
+
+    <script>
+        // Banco de Dados dos Conectores do Painel Traseiro
+        const CONECTORES = {
+            usb: {
+                categoria: "Comunicação & Periféricos",
+                nome: "Portas USB 3.2 / USB 2.0",
+                descricao: "Utilizadas para conectar periféricos externos como mouse, teclado, pendrives, impressoras e HDs externos. As portas azuis (USB 3.0/3.2) transmitem dados em alta velocidade.",
+                sinal: "Digital / Dados + Alimentação Elétrica (5V)",
+                velocidade: "USB 2.0 (480 Mbps) | USB 3.2 (Até 10 Gbps)",
+                uso: "Teclado, Mouse, Pen Drives, Webcams"
+            },
+            video: {
+                categoria: "Saída de Vídeo / Gráficos",
+                nome: "Portas HDMI & DisplayPort",
+                descricao: "Transmitem áudio e vídeo de alta definição diretamente para monitores ou TVs. A DisplayPort é ideal para monitores com altas taxas de atualização (Hz).",
+                sinal: "Digital (Vídeo + Áudio Multicanal)",
+                velocidade: "HDMI 2.1 (até 48 Gbps) | DP 1.4 (32 Gbps)",
+                uso: "Monitores Gaming, TVs e Projetores"
+            },
+            rede: {
+                categoria: "Conectividade de Rede",
+                nome: "Porta RJ-45 (Ethernet LAN)",
+                descricao: "Conecta a CPU à rede local de dados e à Internet por meio de cabo de par trançado. Garante conexões de internet mais estáveis e de menor latência do que o Wi-Fi.",
+                sinal: "Digital de Rede",
+                velocidade: "Gigabit Ethernet (1.000 Mbps / 1 Gbps)",
+                uso: "Cabo de Rede do Roteador/Modem"
+            },
+            audio: {
+                categoria: "E/S de Áudio Analógico",
+                nome: "Conectores Jack P2 (3.5mm)",
+                descricao: "Entradas e saídas de áudio coloridas: Verde (Saída de Som/Fones), Rosa (Entrada de Microfone) e Azul (Line-In / Entrada de áudio auxiliar).",
+                sinal: "Analógico",
+                velocidade: "Frequência de áudio 20Hz - 20kHz",
+                uso: "Fones de Ouvido, Caixas de Som e Microfones"
+            }
+        };
+
+        function exibirInfo(chave) {
+            const dados = CONECTORES[chave];
+            if (!dados) return;
+
+            document.getElementById('port-category').innerText = dados.categoria;
+            document.getElementById('port-name').innerText = dados.nome;
+            document.getElementById('port-desc').innerText = dados.descricao;
+
+            document.getElementById('spec-signal').innerText = dados.sinal;
+            document.getElementById('spec-speed').innerText = dados.velocidade;
+            document.getElementById('spec-use').innerText = dados.uso;
+
+            document.getElementById('port-specs').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
