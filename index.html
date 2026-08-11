@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Objeto de Aprendizagem - Painel Traseiro da CPU</title>
     
-    <!-- Componente WebXR / 3D da Google -->
+    <!-- Componente WebXR / Realidade Aumentada da Google -->
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
 
     <style>
@@ -13,7 +13,7 @@
             --primary: #0d6efd;
             --primary-dark: #0a58ca;
             --secondary: #198754;
-            --dark: #121212;
+            --dark: #0f172a;
             --card-bg: #ffffff;
             --border-radius: 12px;
             --box-shadow: 0 8px 24px rgba(0,0,0,0.12);
@@ -69,7 +69,7 @@
 
         @media (min-width: 992px) {
             .app-grid {
-                grid-template-columns: 1fr 400px;
+                grid-template-columns: 1fr 420px;
             }
         }
 
@@ -88,50 +88,128 @@
             border-bottom: 2px solid #eef2f5;
             padding-bottom: 0.5rem;
             margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
 
-        /* Container do Viewer 3D */
-        .viewer-container {
+        /* ÁREA DO PAINEL DA CPU */
+        .cpu-stage {
             position: relative;
             width: 100%;
-            height: 480px;
+            height: 520px;
             background: radial-gradient(circle, #334155 0%, #0f172a 100%);
             border-radius: var(--border-radius);
-            overflow: hidden;
-        }
-
-        model-viewer {
-            width: 100%;
-            height: 100%;
-            --poster-color: transparent;
-        }
-
-        /* Estilização dos Pins Interativos (Hotspots) */
-        .Hotspot {
-            background: #ffffff;
-            border-radius: 50%;
-            border: 3px solid var(--primary);
-            box-shadow: 0 0 12px rgba(13, 110, 253, 0.6);
-            cursor: pointer;
-            height: 28px;
-            width: 28px;
-            font-weight: bold;
-            font-size: 0.8rem;
-            color: var(--primary-dark);
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.2s ease;
+            overflow: hidden;
         }
 
-        .Hotspot:hover, .Hotspot.active {
-            transform: scale(1.25);
+        /* ESPELHO TRASEIRO DA CPU (Gabinete / Placa-Mãe) */
+        .motherboard-shield {
+            width: 220px;
+            height: 440px;
+            background: linear-gradient(180deg, #94a3b8, #64748b, #475569);
+            border: 4px solid #cbd5e1;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 15px 10px;
+            gap: 12px;
+            position: relative;
+        }
+
+        .shield-grill {
+            width: 100%;
+            height: 40px;
+            background: repeating-linear-gradient(45deg, #1e293b, #1e293b 5px, #334155 5px, #334155 10px);
+            border: 1px solid #0f172a;
+            border-radius: 4px;
+        }
+
+        /* BLOCOS DE PORTAS */
+        .port-group {
+            width: 100%;
+            background: #1e293b;
+            border: 2px solid #0f172a;
+            border-radius: 6px;
+            padding: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .port-group:hover, .port-group.active {
+            border-color: #38bdf8;
+            box-shadow: 0 0 12px #38bdf8;
+            transform: scale(1.03);
+        }
+
+        .port-label {
+            position: absolute;
+            top: -10px;
+            right: -10px;
             background: var(--primary);
             color: white;
-            border-color: #ffffff;
+            font-size: 0.75rem;
+            font-weight: bold;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.4);
         }
 
-        /* Painel Explicativo Lateral */
+        /* DESENHO DAS PORTAS */
+        .draw-port {
+            background: #000;
+            border: 1px solid #94a3b8;
+            border-radius: 3px;
+        }
+
+        .draw-ps2 { width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(90deg, #a855f7 50%, #06b6d4 50%); }
+        .draw-usb { width: 45px; height: 16px; background: #0284c7; }
+        .draw-usb-2 { width: 45px; height: 16px; background: #334155; }
+        .draw-hdmi { width: 50px; height: 14px; background: #fbbf24; border-radius: 2px 2px 5px 5px; }
+        .draw-dp { width: 50px; height: 14px; background: #e2e8f0; }
+        .draw-rj45 { width: 40px; height: 22px; background: #d97706; }
+        .draw-audio-container { display: flex; gap: 8px; }
+        .draw-audio-jack { width: 18px; height: 18px; border-radius: 50%; border: 2px solid #fff; }
+
+        /* BOTÃO DE AR DO MODEL VIEWER */
+        .btn-ar-trigger {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 24px;
+            font-weight: bold;
+            font-size: 0.85rem;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-ar-trigger:hover {
+            transform: scale(1.05);
+        }
+
+        /* PAINEL INFORMATIVO */
         .info-box {
             background: #f8fafc;
             border: 1px solid #e2e8f0;
@@ -178,22 +256,36 @@
             justify-content: space-between;
         }
 
-        .specs-list strong {
-            color: #334155;
+        .specs-list strong { color: #334155; }
+
+        /* MODAL RA */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.75);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
         }
 
-        .instructions-hint {
-            position: absolute;
-            bottom: 12px;
-            left: 12px;
-            right: 12px;
-            background: rgba(15, 23, 42, 0.8);
-            color: white;
-            padding: 8px;
-            border-radius: 6px;
-            font-size: 0.8rem;
+        .modal-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            max-width: 420px;
             text-align: center;
-            pointer-events: none;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 1rem;
         }
 
         footer {
@@ -214,51 +306,81 @@
 
     <header>
         <h1><span>🖥️</span> Hardware: Painel Traseiro da CPU</h1>
-        <p>Objeto de Aprendizagem Interativo • Mapeamento de Conectores e Portas E/S</p>
+        <p>Objeto de Aprendizagem Interativo • Identificação de Conectores E/S</p>
     </header>
 
     <div class="container">
         <div class="app-grid">
 
-            <!-- ÁREA VISUALIZADORA 3D -->
+            <!-- ÁREA DO PAINEL DA CPU -->
             <section>
                 <div class="card">
-                    <div class="card-title">Visão Traseira da Placa-Mãe / CPU</div>
+                    <div class="card-title">
+                        <span>Espelho Traseiro da Placa-Mãe</span>
+                        <span class="status-badge" style="background:#e2e8f0; color:#334155; padding:2px 8px; border-radius:10px; font-size:0.75rem;">Visão Interativa</span>
+                    </div>
 
-                    <div class="viewer-container">
+                    <div class="cpu-stage">
+
+                        <!-- PAINEL REAL DA CPU (SEM O BONECO ASTRONAUTA) -->
+                        <div class="motherboard-shield">
+                            <div class="shield-grill"></div>
+
+                            <!-- 1. PS/2 Combo -->
+                            <div class="port-group" onclick="exibirInfo('ps2')">
+                                <span class="port-label">1</span>
+                                <div class="draw-ps2"></div>
+                            </div>
+
+                            <!-- 2. USB 3.2 / 2.0 -->
+                            <div class="port-group" onclick="exibirInfo('usb')">
+                                <span class="port-label">2</span>
+                                <div style="display:flex; gap:6px;">
+                                    <div class="draw-port draw-usb"></div>
+                                    <div class="draw-port draw-usb"></div>
+                                </div>
+                                <div style="display:flex; gap:6px; margin-top:3px;">
+                                    <div class="draw-port draw-usb-2"></div>
+                                    <div class="draw-port draw-usb-2"></div>
+                                </div>
+                            </div>
+
+                            <!-- 3. HDMI & DisplayPort -->
+                            <div class="port-group" onclick="exibirInfo('video')">
+                                <span class="port-label">3</span>
+                                <div class="draw-port draw-hdmi"></div>
+                                <div class="draw-port draw-dp" style="margin-top:3px;"></div>
+                            </div>
+
+                            <!-- 4. Rede RJ-45 Ethernet -->
+                            <div class="port-group" onclick="exibirInfo('rede')">
+                                <span class="port-label">4</span>
+                                <div class="draw-port draw-rj45"></div>
+                            </div>
+
+                            <!-- 5. Conectores de Áudio P2 -->
+                            <div class="port-group" onclick="exibirInfo('audio')">
+                                <span class="port-label">5</span>
+                                <div class="draw-audio-container">
+                                    <div class="draw-audio-jack" style="background:#22c55e;"></div>
+                                    <div class="draw-audio-jack" style="background:#ec4899;"></div>
+                                    <div class="draw-audio-jack" style="background:#3b82f6;"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Componente Model Viewer oculto apenas para prover a API de RA -->
                         <model-viewer 
-                            id="cpu-viewer"
-                            src="https://modelviewer.dev/shared-assets/models/Astronaut.glb"
-                            alt="Painel Traseiro de CPU"
-                            camera-controls
-                            touch-action="pan-y"
-                            shadow-intensity="1"
-                            autoplay>
-                            
-                            <!-- Hotspot 1: Portas USB 2.0 / 3.0 -->
-                            <button class="Hotspot" slot="hotspot-usb" data-position="0 1.6 0.1" data-normal="0 0 1" onclick="exibirInfo('usb')">
-                                1
-                            </button>
-
-                            <!-- Hotspot 2: Saída HDMI / DisplayPort -->
-                            <button class="Hotspot" slot="hotspot-video" data-position="0 1.2 0" data-normal="0 0 1" onclick="exibirInfo('video')">
-                                2
-                            </button>
-
-                            <!-- Hotspot 3: Rede RJ-45 Ethernet -->
-                            <button class="Hotspot" slot="hotspot-rede" data-position="0 0.8 0" data-normal="0 0 1" onclick="exibirInfo('rede')">
-                                3
-                            </button>
-
-                            <!-- Hotspot 4: Conectores P2 Áudio -->
-                            <button class="Hotspot" slot="hotspot-audio" data-position="0 0.4 0" data-normal="0 0 1" onclick="exibirInfo('audio')">
-                                4
-                            </button>
+                            id="ar-engine"
+                            ar
+                            ar-modes="webxr scene-viewer quick-look"
+                            style="display:none;">
                         </model-viewer>
 
-                        <div class="instructions-hint">
-                            💡 <strong>Clique nos pontos numerados (1, 2, 3, 4)</strong> na peça 3D para inspecionar cada conector.
-                        </div>
+                        <!-- Botão de Realidade Aumentada Funcional -->
+                        <button class="btn-ar-trigger" onclick="acionarRA()">
+                            📱 Ver em Realidade Aumentada (RA)
+                        </button>
                     </div>
                 </div>
             </section>
@@ -269,16 +391,16 @@
                     <div class="card-title">Detalhamento do Conector</div>
 
                     <div id="info-panel" class="info-box">
-                        <span class="info-tag" id="port-category">Selecione uma Porta</span>
-                        <div class="info-title" id="port-name">Clique em um ponto na CPU</div>
+                        <span class="info-tag" id="port-category">Aguardando Seleção</span>
+                        <div class="info-title" id="port-name">Clique em uma porta na CPU</div>
                         <div class="info-detail" id="port-desc">
-                            Clique sobre um dos números marcados na imagem 3D ao lado para ver a função, velocidade de transmissão e equipamentos compatíveis com o conector.
+                            Clique em qualquer um dos conectores numerados (1 a 5) no painel traseiro da CPU ao lado para aprender a função, velocidade e dispositivos compatíveis.
                         </div>
 
                         <ul class="specs-list" id="port-specs" style="display: none;">
                             <li><strong>Tipo de Sinal:</strong> <span id="spec-signal">-</span></li>
                             <li><strong>Taxa de Transmissão:</strong> <span id="spec-speed">-</span></li>
-                            <li><strong>Uso Principal:</strong> <span id="spec-use">-</span></li>
+                            <li><strong>Uso Recomendado:</strong> <span id="spec-use">-</span></li>
                         </ul>
                     </div>
                 </div>
@@ -287,43 +409,66 @@
         </div>
     </div>
 
+    <!-- MODAL RA PARA COMPUTADORES -->
+    <div id="qr-modal" class="modal-overlay" onclick="fecharModal()">
+        <div class="modal-card" onclick="event.stopPropagation()">
+            <h3 style="color:#0d6efd; margin-bottom:10px;">📱 Projetar em Realidade Aumentada</h3>
+            <p style="font-size:0.88rem; color:#555; margin-bottom:15px;">
+                Para projetar o painel no seu ambiente via câmera:
+            </p>
+            <ol style="text-align:left; font-size:0.85rem; margin-left:20px; color:#333; line-height:1.6;">
+                <li>Acesse o site pelo <strong>navegador do seu Celular</strong>.</li>
+                <li>O site deve estar hospedado em protocolo seguro (<strong>https://</strong>).</li>
+                <li>Toque no botão azul <strong>"Ver em Realidade Aumentada"</strong>.</li>
+            </ol>
+            <button class="btn-secondary" onclick="fecharModal()">Entendi</button>
+        </div>
+    </div>
+
     <footer>
         Modelo Hiro | Objeto de Aprendizagem baseado no Plano de Curso
     </footer>
 
     <script>
-        // Banco de Dados dos Conectores do Painel Traseiro
         const CONECTORES = {
+            ps2: {
+                categoria: "Conector Legado",
+                nome: "Porta PS/2 Combo (Teclado/Mouse)",
+                descricao: "Conector circular de 6 pinos para periféricos. A cor roxa indica suporte a teclado e a verde a mouse. Atualmente foi substituído pelo padrão USB.",
+                sinal: "Serial Analógico / Digital",
+                velocidade: "Baixa latência (Comunicação de Interrupção Direta)",
+                uso: "Teclados e Mouses legados"
+            },
             usb: {
                 categoria: "Comunicação & Periféricos",
-                nome: "Portas USB 3.2 / USB 2.0",
-                descricao: "Utilizadas para conectar periféricos externos como mouse, teclado, pendrives, impressoras e HDs externos. As portas azuis (USB 3.0/3.2) transmitem dados em alta velocidade.",
+                nome: "Portas USB 3.2 (Azul) / USB 2.0 (Preta)",
+                descricao: "Portas universais para transmissão de dados e energia. As portas azuis (USB 3.0/3.2) oferecem taxas de velocidade até 10 vezes maiores que as portas pretas (USB 2.0).",
                 sinal: "Digital / Dados + Alimentação Elétrica (5V)",
-                velocidade: "USB 2.0 (480 Mbps) | USB 3.2 (Até 10 Gbps)",
-                uso: "Teclado, Mouse, Pen Drives, Webcams"
+                velocidade: "USB 2.0 (480 Mbps) | USB 3.2 (Até 5 Gbps / 10 Gbps)",
+                uso: "Pendrives, Teclados, Mouses, Impressoras e HDs Externos"
             },
             video: {
-                categoria: "Saída de Vídeo / Gráficos",
+                categoria: "Saída de Vídeo de Alta Definição",
                 nome: "Portas HDMI & DisplayPort",
-                descricao: "Transmitem áudio e vídeo de alta definição diretamente para monitores ou TVs. A DisplayPort é ideal para monitores com altas taxas de atualização (Hz).",
+                descricao: "Conectores responsáveis por enviar sinais de vídeo e áudio digital para monitores, TVs e projetores sem perda de qualidade.",
                 sinal: "Digital (Vídeo + Áudio Multicanal)",
-                velocidade: "HDMI 2.1 (até 48 Gbps) | DP 1.4 (32 Gbps)",
-                uso: "Monitores Gaming, TVs e Projetores"
+                velocidade: "HDMI 2.1 (Até 48 Gbps) | DisplayPort 1.4 (32.4 Gbps)",
+                uso: "Monitores Gamer, TVs 4K/8K e Projetores"
             },
             rede: {
                 categoria: "Conectividade de Rede",
-                nome: "Porta RJ-45 (Ethernet LAN)",
-                descricao: "Conecta a CPU à rede local de dados e à Internet por meio de cabo de par trançado. Garante conexões de internet mais estáveis e de menor latência do que o Wi-Fi.",
+                nome: "Porta RJ-45 (Ethernet LAN / Gigabit)",
+                descricao: "Permite a conexão da CPU com a rede local e a internet via cabo. Possui dois LEDs indicando o status do link e o tráfego de dados.",
                 sinal: "Digital de Rede",
-                velocidade: "Gigabit Ethernet (1.000 Mbps / 1 Gbps)",
-                uso: "Cabo de Rede do Roteador/Modem"
+                velocidade: "10/100/1000 Mbps (Gigabit Ethernet)",
+                uso: "Cabo de Rede (UTP/Cat5e/Cat6) conectado ao Roteador"
             },
             audio: {
-                categoria: "E/S de Áudio Analógico",
-                nome: "Conectores Jack P2 (3.5mm)",
-                descricao: "Entradas e saídas de áudio coloridas: Verde (Saída de Som/Fones), Rosa (Entrada de Microfone) e Azul (Line-In / Entrada de áudio auxiliar).",
-                sinal: "Analógico",
-                velocidade: "Frequência de áudio 20Hz - 20kHz",
+                categoria: "Entrada e Saída de Áudio",
+                nome: "Conectores Áudio Jack P2 (3.5mm)",
+                descricao: "Conectores analógicos de áudio. Verde = Saída de Som (Fone/Caixa de som); Rosa = Entrada de Microfone; Azul = Entrada de Linha (Line-In).",
+                sinal: "Analógico de Áudio",
+                velocidade: "Frequência de resposta 20Hz a 20kHz",
                 uso: "Fones de Ouvido, Caixas de Som e Microfones"
             }
         };
@@ -341,6 +486,19 @@
             document.getElementById('spec-use').innerText = dados.uso;
 
             document.getElementById('port-specs').style.display = 'block';
+        }
+
+        function acionarRA() {
+            const arEngine = document.getElementById('ar-engine');
+            if (arEngine.canActivateAR) {
+                arEngine.activateAR();
+            } else {
+                document.getElementById('qr-modal').style.display = 'flex';
+            }
+        }
+
+        function fecharModal() {
+            document.getElementById('qr-modal').style.display = 'none';
         }
     </script>
 </body>
