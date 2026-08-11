@@ -99,7 +99,7 @@
         .ar-viewer-container {
             position: relative;
             width: 100%;
-            height: 420px;
+            height: 440px;
             background: radial-gradient(circle, #2c3e50 0%, #0f172a 100%);
             border-radius: var(--border-radius);
             overflow: hidden;
@@ -169,21 +169,73 @@
             display: flex;
             align-items: center;
             gap: 6px;
+            z-index: 5;
+        }
+
+        /* Botão Visível Forçado de RA */
+        .btn-ar-action {
+            position: absolute;
+            bottom: 45px;
+            right: 16px;
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 24px;
+            font-weight: bold;
+            font-size: 0.85rem;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+            z-index: 20;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: transform 0.2s ease;
+        }
+
+        .btn-ar-action:hover {
+            transform: scale(1.05);
+            background: linear-gradient(135deg, #0056b3, #003d80);
         }
 
         .ar-instructions {
             position: absolute;
-            bottom: 12px;
+            bottom: 8px;
             left: 12px;
             right: 12px;
-            background: rgba(0,0,0,0.7);
+            background: rgba(0,0,0,0.75);
             color: white;
-            padding: 8px 12px;
+            padding: 6px 12px;
             border-radius: 8px;
             font-size: 0.78rem;
             text-align: center;
             pointer-events: none;
+            z-index: 5;
         }
+
+        /* Modal do QR Code RA para Computador */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top:0; left:0; width:100%; height:100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .modal-card h3 { color: var(--primary-dark); margin-bottom: 0.5rem; }
+        .modal-card p { font-size: 0.88rem; color: #555; margin-bottom: 1rem; }
+        .modal-card img { width: 180px; height: 180px; margin-bottom: 1rem; }
 
         /* Formulários e Sliders */
         .form-group {
@@ -318,15 +370,20 @@
                 <div class="card">
                     <div class="card-title">
                         <span>1. Projeção em Realidade Aumentada (RA)</span>
-                        <span id="ar-status" class="status-badge status-conforme">RA Pronta</span>
+                        <span id="ar-status" class="status-badge status-conforme">RA Habilitada</span>
                     </div>
 
                     <div class="ar-viewer-container">
                         <div class="ar-badge-banner">
-                            <span>📷</span> Toque no botão "Ver em RA" para projetar na sala/oficina
+                            <span>📷</span> Câmera / Projeção no Espaço
                         </div>
 
-                        <!-- Componente Model Viewer com suporte a WebXR/ARCore/ARKit -->
+                        <!-- Botão Visível Garantido -->
+                        <button class="btn-ar-action" onclick="abrirRA()">
+                            📱 Ver em Realidade Aumentada (RA)
+                        </button>
+
+                        <!-- Componente Model Viewer -->
                         <model-viewer 
                             id="injetora-ar"
                             src="https://modelviewer.dev/shared-assets/models/Astronaut.glb"
@@ -339,7 +396,7 @@
                             exposure="1"
                             autoplay>
                             
-                            <!-- Hotspots 3D Interativos visíveis no Espaço / RA -->
+                            <!-- Hotspots 3D Interativos -->
                             <button class="Hotspot" slot="hotspot-1" data-position="0 1.6 0.1" data-normal="0 0 1">
                                 1. Funil & Dosador
                                 <div class="HotspotAnnotation">Alimentação do polímero em grãos e dosagem do aditivo.</div>
@@ -354,21 +411,15 @@
                                 3. Unidade do Molde
                                 <div class="HotspotAnnotation">Cavidades, canais de resfriamento e extratores.</div>
                             </button>
-
-                            <!-- Botão Customizado de Ativação da Câmera em RA -->
-                            <button slot="ar-button" style="position: absolute; bottom: 45px; right: 16px; background: var(--primary); color: white; border: none; padding: 10px 18px; border-radius: 24px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
-                                📱 Ver no seu Espaço (RA)
-                            </button>
                         </model-viewer>
 
                         <div class="ar-instructions">
-                            💡 <strong>No Computador:</strong> Gire e de zoom no modelo 3D. <br>
-                            📱 <strong>No Celular:</strong> Pressione "Ver no seu Espaço" para projetar o equipamento na sua mesa ou chão via Câmera.
+                            💡 <strong>Gire e dê zoom</strong> no modelo 3D. Clique no botão azul para projetar com a câmera.
                         </div>
                     </div>
                 </div>
 
-                <!-- DIAGNÓSTICO DO PROCESSO (Avaliador de Qualidade) -->
+                <!-- DIAGNÓSTICO DO PROCESSO -->
                 <div class="card">
                     <div class="card-title">
                         <span>2. Inspeção de Qualidade & Diagnóstico da Peça</span>
@@ -385,7 +436,7 @@
 
             <!-- PAINEL LATERAL: CÁLCULOS E CONTROLE IHM -->
             <aside>
-                <!-- Bloco de Polímero e EPI -->
+                <!-- Bloco de Polímero -->
                 <div class="card">
                     <div class="card-title">
                         <span>Seleção de Material</span>
@@ -407,7 +458,7 @@
                     </div>
                 </div>
 
-                <!-- Painel de Controle IHM (Parâmetros) -->
+                <!-- Painel de Controle IHM -->
                 <div class="card">
                     <div class="card-title">
                         <span>Parâmetros de Processo (CLP)</span>
@@ -422,7 +473,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label>Pressão de Injeção ($bar$):</label>
+                        <label>Pressão de Injeção (bar):</label>
                         <div class="range-container">
                             <input type="range" id="pressao-inj" min="300" max="1500" value="850" step="10" oninput="atualizarIHM()">
                             <span id="val-pressao" class="range-val">850 bar</span>
@@ -430,7 +481,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label>Pressão de Recalque ($bar$):</label>
+                        <label>Pressão de Recalque (bar):</label>
                         <div class="range-container">
                             <input type="range" id="pressao-rec" min="100" max="1200" value="500" step="10" oninput="atualizarIHM()">
                             <span id="val-recalque" class="range-val">500 bar</span>
@@ -438,7 +489,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label>Força de Travamento Injetora ($Ton$):</label>
+                        <label>Força de Travamento Injetora (Ton):</label>
                         <div class="range-container">
                             <input type="range" id="forca-trava" min="20" max="200" value="80" step="5" oninput="atualizarIHM()">
                             <span id="val-trava" class="range-val">80 Ton</span>
@@ -446,7 +497,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label>Tempo de Resfriamento ($s$):</label>
+                        <label>Tempo de Resfriamento (s):</label>
                         <div class="range-container">
                             <input type="range" id="tempo-resfr" min="2" max="30" value="12" oninput="atualizarIHM()">
                             <span id="val-resfr" class="range-val">12 s</span>
@@ -465,7 +516,18 @@
         </div>
     </div>
 
-    <!-- Marcador de Autoria Obrigatório no Rodapé -->
+    <!-- MODAL QR CODE SE ESTIVER NO PC -->
+    <div id="qr-modal" class="modal-overlay" onclick="fecharModal()">
+        <div class="modal-card" onclick="event.stopPropagation()">
+            <h3>📱 Projetar em Realidade Aumentada</h3>
+            <p>Aponte a câmera do seu celular para o QR Code abaixo para abrir a câmera e projetar o modelo na sua mesa/sala:</p>
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://modelviewer.dev/examples/augmentedreality/" alt="QR Code RA">
+            <br>
+            <button class="btn btn-secondary" onclick="fecharModal()">Fechar</button>
+        </div>
+    </div>
+
+    <!-- Rodapé Obrigatório -->
     <footer>
         Modelo Hiro | Objeto de Aprendizagem baseado no Plano de Curso
     </footer>
@@ -482,6 +544,21 @@
             atualizarMaterial();
         };
 
+        function abrirRA() {
+            const mv = document.getElementById('injetora-ar');
+            // Se o navegador suporta ativação direta de RA (celulares)
+            if (mv.canActivateAR) {
+                mv.activateAR();
+            } else {
+                // Se estiver no computador, exibe modal com instrução e QR Code
+                document.getElementById('qr-modal').style.display = 'flex';
+            }
+        }
+
+        function fecharModal() {
+            document.getElementById('qr-modal').style.display = 'none';
+        }
+
         function atualizarMaterial() {
             const matKey = document.getElementById('material-select').value;
             const mat = MATERIAIS[matKey];
@@ -494,7 +571,6 @@
         }
 
         function calcularForcaRequerida() {
-            // Área constante de teste: 180 cm² | Pressão cavidade média: 350 bar
             const area = 180;
             const pressaoCav = 350;
             const forcaTon = (area * pressaoCav * 1.15) / 1000;
@@ -525,7 +601,6 @@
             const title = document.getElementById('diag-status-title');
             const desc = document.getElementById('diag-status-desc');
 
-            // Feedback dinâmico e diagnóstico
             if (fTrava < fNec) {
                 box.className = "diagnostic-box erro";
                 title.innerText = "⚠️ Defeito: Rebarba (Flash)";
