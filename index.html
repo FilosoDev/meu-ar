@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Objeto de Aprendizagem AR - Painel Traseiro da CPU</title>
+    <title>Painel Traseiro da CPU em Realidade Aumentada</title>
 
     <!-- Bibliotecas A-Frame e AR.js -->
     <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
@@ -14,7 +14,7 @@
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
         }
 
         /* BANNER SUPERIOR COM INSTRUÇÕES */
@@ -43,7 +43,7 @@
             opacity: 0.9;
         }
 
-        /* CARD POPUP INFORMATIVO */
+        /* CARD POPUP INFORMATIVO DO CONECTOR */
         .info-card {
             position: fixed;
             bottom: 50px;
@@ -141,71 +141,97 @@
 <body style="margin: 0px; overflow: hidden;">
 
     <header>
-        <h1>🖥️ Realidade Aumentada - Painel Traseiro da CPU</h1>
-        <p>Aponte a câmera para o marcador <strong>HIRO</strong> e toque nas esferas numeradas</p>
+        <h1>🖥️ Painel Traseiro da CPU (I/O Shield)</h1>
+        <p>Aponte para o marcador <strong>HIRO</strong> e toque em qualquer porta para inspecionar</p>
     </header>
 
-    <!-- CARD POPUP DE DETALHES DAS PORTAS -->
+    <!-- POPUP COM INFORMAÇÕES TÉCNICAS DA PORTA -->
     <div id="info-card" class="info-card">
         <button class="btn-close" onclick="fecharInfo()">✕</button>
         <span id="card-tag" class="info-tag">Porta</span>
-        <div id="card-title" class="info-title">Nome da Porta</div>
-        <div id="card-desc" class="info-desc">Descrição técnica.</div>
-        <div id="card-spec" class="info-spec">⚡ <strong>Recurso Técnico:</strong> <span id="card-speed">-</span></div>
+        <div id="card-title" class="info-title">Nome do Conector</div>
+        <div id="card-desc" class="info-desc">Descrição funcional.</div>
+        <div id="card-spec" class="info-spec">⚡ <strong>Especificação:</strong> <span id="card-speed">-</span></div>
     </div>
 
-    <!-- CENA AR (A-FRAME) -->
+    <!-- CENA AR -->
     <a-scene 
         embedded 
         arjs="sourceType: webcam; debugUIEnabled: false;"
         cursor="rayOrigin: mouse" 
         raycaster="objects: .clickable">
 
-        <a-assets>
-            <!-- Carregamento do Modelo 3D de Computador (GLTF/GLB) -->
-            <a-asset-item id="pc-model" src="https://raw.githack.com/KhronosGroup/glTF-Sample-Assets/main/Models/Computer/glTF-Binary/Computer.glb"></a-asset-item>
-        </a-assets>
-
         <!-- MARCADOR HIRO -->
         <a-marker preset="hiro">
 
-            <!-- GRUPO DO MODELO 3D + HOTSPOTS -->
-            <a-entity position="0 0 0" rotation="0 0 0" scale="0.8 0.8 0.8">
+            <!-- ESTRUTURA DO ESPELHO/PAINEL TRASEIRO DA CPU -->
+            <a-entity position="0 0 0" rotation="-90 0 0" scale="1.2 1.2 1.2">
 
-                <!-- Gabinete 3D em Realidade Aumentada -->
-                <a-entity 
-                    gltf-model="#pc-model" 
-                    position="0 0 0" 
-                    rotation="0 180 0" 
-                    scale="1.5 1.5 1.5">
+                <!-- 1. PLACA BASE DO ESPELHO METALIZADO (I/O SHIELD) -->
+                <a-box position="0 0 -0.05" width="1.6" height="3.4" depth="0.08" color="#94a3b8" material="metalness: 0.8; roughness: 0.2"></a-box>
+                <a-plane position="0 0 0" width="1.5" height="3.3" color="#1e293b"></a-plane>
+
+                <!-- CONECTOR PS/2 (TECLADO/MOUSE LEGADO) -->
+                <a-entity class="clickable" onclick="exibirInfo('ps2')" position="-0.35 1.2 0.08">
+                    <a-cylinder radius="0.16" height="0.12" color="#9333ea" rotation="90 0 0">
+                        <a-cylinder radius="0.12" height="0.13" color="#16a34a" rotation="0 0 0"></a-cylinder>
+                    </a-cylinder>
+                    <a-text value="PS/2" position="0 -0.25 0" align="center" scale="0.5 0.5 0.5" color="#ffffff"></a-text>
                 </a-entity>
 
-                <!-- HOTSPOTS INTERATIVOS (PONTOS DE CLIQUE) POSICIONADOS NO PAINEL TRASEIRO -->
+                <!-- PORTA DE VÍDEO VGA (AZUL - DB15) -->
+                <a-entity class="clickable" onclick="exibirInfo('vga')" position="0.35 1.2 0.08">
+                    <a-box width="0.45" height="0.22" depth="0.12" color="#2563eb">
+                        <a-text value="VGA" position="0 0 0.07" align="center" scale="0.4 0.4 0.4" color="#ffffff"></a-text>
+                    </a-box>
+                </a-entity>
 
-                <!-- 1. Fonte de Alimentação (Energia) -->
-                <a-sphere class="clickable" onclick="exibirInfo('fonte')" position="0 1.2 -0.3" radius="0.12" color="#ef4444" opacity="0.85">
-                    <a-text value="1" position="0 0 0.15" align="center" scale="1.2 1.2 1.2" color="#ffffff"></a-text>
-                </a-sphere>
+                <!-- PORTA DE VÍDEO HDMI (DIGITAL DOURADA) -->
+                <a-entity class="clickable" onclick="exibirInfo('hdmi')" position="-0.35 0.6 0.08">
+                    <a-box width="0.45" height="0.18" depth="0.12" color="#d97706">
+                        <a-text value="HDMI" position="0 0 0.07" align="center" scale="0.4 0.4 0.4" color="#ffffff"></a-text>
+                    </a-box>
+                </a-entity>
 
-                <!-- 2. Portas de Vídeo (HDMI / DisplayPort) -->
-                <a-sphere class="clickable" onclick="exibirInfo('video')" position="-0.25 0.6 -0.3" radius="0.12" color="#eab308" opacity="0.85">
-                    <a-text value="2" position="0 0 0.15" align="center" scale="1.2 1.2 1.2" color="#ffffff"></a-text>
-                </a-sphere>
+                <!-- PORTA DISPLAYPORT -->
+                <a-entity class="clickable" onclick="exibirInfo('displayport')" position="0.35 0.6 0.08">
+                    <a-box width="0.45" height="0.18" depth="0.12" color="#475569">
+                        <a-text value="DP" position="0 0 0.07" align="center" scale="0.4 0.4 0.4" color="#ffffff"></a-text>
+                    </a-box>
+                </a-entity>
 
-                <!-- 3. Portas USB (Periféricos e Dados) -->
-                <a-sphere class="clickable" onclick="exibirInfo('usb')" position="0.25 0.6 -0.3" radius="0.12" color="#3b82f6" opacity="0.85">
-                    <a-text value="3" position="0 0 0.15" align="center" scale="1.2 1.2 1.2" color="#ffffff"></a-text>
-                </a-sphere>
+                <!-- PORTAS USB 3.0 (DUPLA AZUL) -->
+                <a-entity class="clickable" onclick="exibirInfo('usb3')" position="-0.35 0.0 0.08">
+                    <a-box position="0 0.1 0" width="0.42" height="0.18" depth="0.12" color="#0284c7"></a-box>
+                    <a-box position="0 -0.1 0" width="0.42" height="0.18" depth="0.12" color="#0284c7"></a-box>
+                    <a-text value="USB 3.0" position="0 -0.26 0" align="center" scale="0.4 0.4 0.4" color="#38bdf8"></a-text>
+                </a-entity>
 
-                <!-- 4. Rede Ethernet (RJ-45) -->
-                <a-sphere class="clickable" onclick="exibirInfo('rede')" position="-0.25 0.2 -0.3" radius="0.12" color="#10b981" opacity="0.85">
-                    <a-text value="4" position="0 0 0.15" align="center" scale="1.2 1.2 1.2" color="#ffffff"></a-text>
-                </a-sphere>
+                <!-- PORTA REDE ETHERNET (RJ-45) + USB 2.0 -->
+                <a-entity class="clickable" onclick="exibirInfo('rede')" position="0.35 0.0 0.08">
+                    <a-box position="0 0.12" width="0.45" height="0.22" depth="0.15" color="#b45309">
+                        <a-text value="LAN" position="0 0 0.08" align="center" scale="0.4 0.4 0.4" color="#ffffff"></a-text>
+                    </a-box>
+                    <a-box position="0 -0.1" width="0.42" height="0.16" depth="0.12" color="#334155"></a-box>
+                </a-entity>
 
-                <!-- 5. Conectores de Áudio (P2/Jack) -->
-                <a-sphere class="clickable" onclick="exibirInfo('audio')" position="0.25 0.2 -0.3" radius="0.12" color="#ec4899" opacity="0.85">
-                    <a-text value="5" position="0 0 0.15" align="center" scale="1.2 1.2 1.2" color="#ffffff"></a-text>
-                </a-sphere>
+                <!-- PORTAS DE ÁUDIO JACK P2 (VERDE, ROSA, AZUL) -->
+                <a-entity class="clickable" onclick="exibirInfo('audio')" position="0 -0.8 0.08">
+                    <!-- Áudio Saída (Verde) -->
+                    <a-cylinder position="0 0.3 0" radius="0.11" height="0.1" color="#22c55e" rotation="90 0 0"></a-cylinder>
+                    <!-- Microfone (Rosa) -->
+                    <a-cylinder position="-0.35 0 0" radius="0.11" height="0.1" color="#ec4899" rotation="90 0 0"></a-cylinder>
+                    <!-- Entrada de Linha (Azul) -->
+                    <a-cylinder position="0.35 0 0" radius="0.11" height="0.1" color="#3b82f6" rotation="90 0 0"></a-cylinder>
+                    <a-text value="AUDIO P2" position="0 -0.22 0" align="center" scale="0.4 0.4 0.4" color="#ffffff"></a-text>
+                </a-entity>
+
+                <!-- FONTE DE ALIMENTAÇÃO (CONECTOR TRIPOULAR AC) -->
+                <a-entity class="clickable" onclick="exibirInfo('fonte')" position="0 -1.3 0.08">
+                    <a-box width="0.9" height="0.3" depth="0.12" color="#0f172a">
+                        <a-text value="ENTRADA DE ENERGIA (AC)" position="0 0 0.07" align="center" scale="0.35 0.35 0.35" color="#ef4444"></a-text>
+                    </a-box>
+                </a-entity>
 
             </a-entity>
 
@@ -216,41 +242,59 @@
     </a-scene>
 
     <footer>
-        Objeto de Aprendizagem AR | Marcador Hiro
+        Objeto de Aprendizagem AR | I/O Shield CPU
     </footer>
 
     <script>
-        // BASE DE DADOS DOS CONECTORES TRASEIROS
+        // BASE DE DADOS TÉCNICA DE CADA CONECTOR REAL DA CPU
         const CONECTORES = {
-            fonte: {
-                categoria: "Alimentação Elétrica",
-                nome: "Entrada da Fonte (AC Power)",
-                descricao: "Conecta o cabo de força tripolar à fonte de alimentação para suprir energia elétrica a todos os componentes internos da CPU.",
-                especificacao: "Tensões: 110V / 220V AC (Frequência: 50/60Hz)"
+            ps2: {
+                categoria: "Conector Legado",
+                nome: "Porta PS/2 Combo",
+                descricao: "Conector circular de 6 pinos para teclado (roxo) e mouse (verde).",
+                especificacao: "Comunicação via interrupção direta de hardware"
             },
-            video: {
-                categoria: "Saída de Vídeo / Exibição",
-                nome: "Portas HDMI & DisplayPort",
-                descricao: "Enviam sinais digitais de áudio e vídeo de alta definição para monitores, TVs ou projetores.",
-                especificacao: "Suporte a resoluções Full HD, 4K e altas taxas de atualização (Hz)"
+            vga: {
+                categoria: "Saída de Vídeo Analógica",
+                nome: "Porta VGA (DB-15)",
+                descricao: "Transmite sinal analógico de vídeo para monitores antigos e projetores.",
+                especificacao: "Resolução máxima recomendada: 1920x1080 (Full HD)"
             },
-            usb: {
-                categoria: "Barramento Universal (E/S)",
-                nome: "Portas USB 3.0 / 3.2",
-                descricao: "Utilizadas para conectar periféricos como teclado, mouse, pen drives, HDs externos e impressoras.",
-                especificacao: "Taxas de transferência de até 5 Gbps (USB 3.0) ou 10 Gbps (USB 3.2)"
+            hdmi: {
+                categoria: "Saída de Vídeo & Áudio Digital",
+                nome: "Porta HDMI",
+                descricao: "Transmite sinais digitais não comprimidos de vídeo e áudio num único cabo.",
+                especificacao: "Suporte a 4K, HDR e canais de áudio multicanal"
+            },
+            displayport: {
+                categoria: "Saída de Vídeo de Alta Performance",
+                nome: "DisplayPort (DP)",
+                descricao: "Padrão de exibição digital focado em monitores de alta taxa de atualização.",
+                especificacao: "Suporta tecnologia G-Sync/FreeSync e resoluções 4K/8K"
+            },
+            usb3: {
+                categoria: "Barramento Serial Universal",
+                nome: "Portas USB 3.0 / 3.2 (Azul)",
+                descricao: "Portas de alta velocidade para pendrives, HDs externos e periféricos modernos.",
+                especificacao: "Velocidade de transferência: 5 Gbps a 10 Gbps"
             },
             rede: {
-                categoria: "Conectividade de Rede",
-                nome: "Porta RJ-45 (Ethernet LAN)",
-                descricao: "Permite a conexão física via cabo de rede UTP ao roteador ou switch para acesso à internet e redes locais.",
+                categoria: "Rede Física",
+                nome: "Porta RJ-45 (Ethernet Network)",
+                descricao: "Conecta a CPU à rede local e internet através de cabos de par trançado.",
                 especificacao: "Padrão Gigabit Ethernet (10/100/1000 Mbps)"
             },
             audio: {
-                categoria: "Entrada e Saída de Áudio",
-                nome: "Conectores Jack P2 (3.5mm)",
-                descricao: "Portas analógicas para som: Verde (Saída de Áudio/Caixas de som), Rosa (Microfone) e Azul (Entrada de Linha/Auxiliar).",
-                especificacao: "Sinal de Áudio Analógico Estéreo"
+                categoria: "Interface de Som Analógica",
+                nome: "Painel de Áudio P2 (3.5mm)",
+                descricao: "Verde: Saída de som (Fones/Caixas) | Rosa: Entrada de Microfone | Azul: Line-In (Entrada auxiliar).",
+                especificacao: "Sinais de áudio analógico estéreo/Surround"
+            },
+            fonte: {
+                categoria: "Alimentação Elétrica",
+                nome: "Conector Triplo AC (Fonte)",
+                descricao: "Entrada do cabo de força vindo da tomada para alimentar a fonte do gabinete.",
+                especificacao: "Tensão de 110V/220V AC com pino de aterramento"
             }
         };
 
